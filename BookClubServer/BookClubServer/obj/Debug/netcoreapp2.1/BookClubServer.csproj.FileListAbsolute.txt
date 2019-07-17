@@ -1,0 +1,14 @@
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\bin\Debug\netcoreapp2.1\BookClubServer.deps.json
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\bin\Debug\netcoreapp2.1\BookClubServer.runtimeconfig.json
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\bin\Debug\netcoreapp2.1\BookClubServer.runtimeconfig.dev.json
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\bin\Debug\netcoreapp2.1\BookClubServer.dll
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\bin\Debug\netcoreapp2.1\BookClubServer.pdb
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.csprojAssemblyReference.cache
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.csproj.CoreCompileInputs.cache
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.RazorAssemblyInfo.cache
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.RazorAssemblyInfo.cs
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.AssemblyInfoInputs.cache
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.AssemblyInfo.cs
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.RazorTargetAssemblyInfo.cache
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.dll
+C:\Users\Jessica Fong\Documents\GitHub\Book-Club\BookClubServer\BookClubServer\obj\Debug\netcoreapp2.1\BookClubServer.pdb
