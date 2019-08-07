@@ -1,13 +1,15 @@
 ﻿using BookClubServer.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookClubServer.Services
 {
     public interface IBookClubServices
     {
-        Task<User> RegisterNewUserAsync(UserCreateModel newUser); // should be userCreateModel not newUser
+        /// <summary>
+        /// Function to create new users
+        /// </summary>
+        /// <param name="userCreateModel"> Data to create new user with </param>
+        /// <returns> New user </returns>
+        Task<User> RegisterNewUserAsync(UserCreateModel userCreateModel);
     }
 }

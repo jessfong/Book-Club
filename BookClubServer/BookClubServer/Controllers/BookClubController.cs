@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookClubServer.Data;
 using BookClubServer.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookClubServer.Controllers
@@ -13,19 +9,29 @@ namespace BookClubServer.Controllers
     [ApiController]
     public class BookClubController : ControllerBase
     {
-        private readonly IBookClubServices _bookClubServices;
+        private IBookClubServices _bookClubServices;
 
         public BookClubController(IBookClubServices bookClubServices)
         {
             _bookClubServices = bookClubServices;
         }
 
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <param name="userCreateModel"> User data to create account with </param>
+        /// <returns> New user or error message </returns>
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser([FromBody] UserCreateModel userCreateModel)
         {
             var result = await _bookClubServices.RegisterNewUserAsync(userCreateModel);
 
-            return new JsonResult($"Created {result.Username} {result.Password}");
+            if (result != null)
+            {
+                return new JsonResult($"Created {result.Username} {result.Password}");
+            }
+
+            return new JsonResult("Error creating new user");
         }
     }
 }

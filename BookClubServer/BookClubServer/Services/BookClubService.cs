@@ -1,6 +1,5 @@
 ﻿using BookClubServer.Data;
-using System;
-using System.Collections.Generic;
+using BookClubServer.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,38 +7,40 @@ namespace BookClubServer.Services
 {
     public class BookClubServices : IBookClubServices
     {
-        private readonly BookClubContext context; // Should be _bookClubContext
+        private readonly BookClubContext _bookClubContext;
 
         public BookClubServices(BookClubContext bookClubContext)
         {
-            context = bookClubContext;
+            _bookClubContext = bookClubContext;
         }
 
-        public async Task<User> RegisterNewUserAsync(UserCreateModel model) // shouldn't be model as name. userCreateModel
+        /// <summary>
+        /// Checks if new user is already a registered user in the database
+        /// If not, a new user is created
+        /// </summary>
+        /// <param name="userCreateModel"> NEw user to be created </param>
+        /// <returns> New user or null </returns>
+        public async Task<User> RegisterNewUserAsync(UserCreateModel userCreateModel)
         {
-
-            /*BAD: var result = (from u in context.Users
-                          where u.Username == model.Username
-                          select u).Count();*/
-
-            var exist = context.Users.Any(u => u.Username.Equals(model.Username));
-
-            if (exist)
+            var exist = _bookClubContext.Users.Any(u => u.Username.Equals(userCreateModel.Username));
+            
+            if (!exist)
             {
-                // hash password
+                var passwordHasher = new PasswordHasher();
+                var hash = passwordHasher.Hash(userCreateModel.Password);
 
                 var newUser = new User
-                {
-                    Username = model.Username,
-                    Password = model.Password,
-                    Email = model.Email
+                { 
+                    Username = userCreateModel.Username,
+                    Password = hash,
+                    Email = userCreateModel.Email
                 };
 
-                var addTask = context.Users.AddAsync(newUser);
+                var addTask = _bookClubContext.Users.AddAsync(newUser);
 
                 await addTask;
 
-                var saveTask = context.SaveChangesAsync();
+                var saveTask = _bookClubContext.SaveChangesAsync();
 
                 return new User
                 {
@@ -48,10 +49,7 @@ namespace BookClubServer.Services
                     Email = newUser.Email
                 };
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }
