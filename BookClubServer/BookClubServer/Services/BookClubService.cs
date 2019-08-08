@@ -1,5 +1,6 @@
 ﻿using BookClubServer.Data;
 using BookClubServer.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,6 +50,32 @@ namespace BookClubServer.Services
                     Email = newUser.Email
                 };
             }
+            return null;
+        }
+
+        /// <summary>
+        /// Verifies if username and password are valid
+        /// </summary>
+        /// <param name="user"> Entered username and password </param>
+        /// <returns> If data is valid or not </returns>
+        public async Task<IActionResult> SignIn(User user)
+        {
+            var exist = _bookClubContext.Users.Any(u => u.Username.Equals(user.Username));
+
+            if (exist)
+            {
+                var passwordHasher = new PasswordHasher();
+                var hashedPassword = passwordHasher.Hash(user.Password);
+
+                var validPassword = passwordHasher.Verify(user.Password, hashedPassword);
+
+                if (validPassword)
+                {
+                    OkResult ok = new OkResult();
+                    return ok;
+                }
+            }
+
             return null;
         }
     }

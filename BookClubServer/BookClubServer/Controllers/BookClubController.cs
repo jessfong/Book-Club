@@ -33,5 +33,23 @@ namespace BookClubServer.Controllers
 
             return new JsonResult("Error creating new user");
         }
+
+        /// <summary>
+        /// Checks if username and password are valid for login
+        /// </summary>
+        /// <param name="user"> User to look for </param>
+        /// <returns> If user is valid or not </returns>
+        [HttpPost]
+        public async Task<IActionResult> SignIn([FromBody] User user)
+        {
+            var result = await _bookClubServices.SignIn(user);
+
+            if (result != null)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
     }
 }

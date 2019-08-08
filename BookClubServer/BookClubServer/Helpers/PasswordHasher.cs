@@ -33,7 +33,7 @@ namespace BookClubServer.Helpers
             var base64Hash = Convert.ToBase64String(hashBytes);
 
             // Form has hwith extra info
-            return string.Format($"$HashValue${iterations}${base64Hash}");
+            return string.Format($"$HashValue$V1${iterations}${base64Hash}");
         }
         
         /// <summary>
@@ -54,7 +54,7 @@ namespace BookClubServer.Helpers
         /// <returns> True or false depending on if the string contains the text 'HashValue' </returns>
         public bool IsHashSupported(string hashString)
         {
-            return hashString.Contains("$HashValue");
+            return hashString.Contains("$HashValue$V1");
         }
 
         /// <summary>
@@ -66,13 +66,13 @@ namespace BookClubServer.Helpers
         public bool Verify(string password, string hashedPassword)
         {
             // Check hash
-            if (!IsHashSupported(password))
+            if (!IsHashSupported(hashedPassword))
             {
-                throw new NotSupportedException("This hashtype is not supported");
+                return false;
             }
 
             // Extract iteration and base64 string
-            var splittedHashString = hashedPassword.Replace("$HashValue", "").Split('$');
+            var splittedHashString = hashedPassword.Replace("$HashValue$V1$", "").Split('$');
             var iterations = int.Parse(splittedHashString[0]);
             var base64Hash = splittedHashString[1];
 
@@ -100,3 +100,4 @@ namespace BookClubServer.Helpers
         }
     }
 }
+  
