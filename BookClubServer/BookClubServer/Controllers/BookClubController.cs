@@ -10,7 +10,7 @@ namespace BookClubServer.Controllers
     [ApiController]
     public class BookClubController : ControllerBase
     {
-        private IBookClubServices _bookClubServices;
+        private readonly IBookClubServices _bookClubServices;
 
         public BookClubController(IBookClubServices bookClubServices)
         {
@@ -28,7 +28,7 @@ namespace BookClubServer.Controllers
             if (_bookClubServices.DoesUserExist(userCreateModel.Email))
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return new JsonResult($"User with the email {userCreateModel.Email} already exists. ");
+                return new JsonResult($"User with the email {userCreateModel.Email} already exists.");
             }
 
             if (!_bookClubServices.IsStrongPassword(userCreateModel.Password))
