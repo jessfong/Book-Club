@@ -3,14 +3,16 @@ using BookClubServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookClubServer.Migrations
 {
     [DbContext(typeof(BookClubContext))]
-    partial class BookClubContextModelSnapshot : ModelSnapshot
+    [Migration("20190808151951_AddBookClubTable")]
+    partial class AddBookClubTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +50,9 @@ namespace BookClubServer.Migrations
                     b.Property<string>("Password")
                         .IsRequired();
 
+                    b.Property<string>("Username")
+                        .IsRequired();
+
                     b.HasKey("ID");
 
                     b.ToTable("Users");
@@ -56,7 +61,7 @@ namespace BookClubServer.Migrations
             modelBuilder.Entity("BookClubServer.Data.BookClub", b =>
                 {
                     b.HasOne("BookClubServer.Data.User", "Admin")
-                        .WithMany("BookClubs")
+                        .WithMany()
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

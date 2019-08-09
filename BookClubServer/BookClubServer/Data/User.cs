@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookClubServer.Data
 {
@@ -8,12 +9,11 @@ namespace BookClubServer.Data
         public int ID { get; set; }
 
         [Required]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
-
-        [Required]
-        public string Email { get; set; }
+        
+        public virtual List<BookClub> BookClubs { get; set; }
     }
 }

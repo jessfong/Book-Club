@@ -1,6 +1,5 @@
 ﻿using BookClubServer.Data;
 using BookClubServer.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,53 +15,40 @@ namespace BookClubServer.Services
         }
 
         /// <summary>
-        /// Checks if new user is already a registered user in the database
-        /// If not, a new user is created
+        /// Creates a new user
         /// </summary>
-        /// <param name="userCreateModel"> NEw user to be created </param>
-        /// <returns> New user or null </returns>
+        /// <param name="userCreateModel"> New user to create </param>
+        /// <returns> New user </returns>
         public async Task<User> RegisterNewUserAsync(UserCreateModel userCreateModel)
         {
-            var exist = _bookClubContext.Users.Any(u => u.Username.Equals(userCreateModel.Username));
-            
-            if (!exist)
+            var passwordHasher = new PasswordHasher();
+            var hash = passwordHasher.Hash(userCreateModel.Password);
+
+            var newUser = new User
+            { 
+                Email = userCreateModel.Email,
+                Password = hash
+            };
+
+            await _bookClubContext.Users.AddAsync(newUser);
+
+            await _bookClubContext.SaveChangesAsync();
+
+            return new User
             {
-                var passwordHasher = new PasswordHasher();
-                var hash = passwordHasher.Hash(userCreateModel.Password);
-
-                var newUser = new User
-                { 
-                    Username = userCreateModel.Username,
-                    Password = hash,
-                    Email = userCreateModel.Email
-                };
-
-                var addTask = _bookClubContext.Users.AddAsync(newUser);
-
-                await addTask;
-
-                var saveTask = _bookClubContext.SaveChangesAsync();
-
-                return new User
-                {
-                    Username = newUser.Username,
-                    Password = newUser.Password,
-                    Email = newUser.Email
-                };
-            }
-            return null;
+                Email = newUser.Email,
+                Password = newUser.Password
+            };
         }
-
+        
         /// <summary>
         /// Verifies if username and password are valid
         /// </summary>
         /// <param name="user"> Entered username and password </param>
-        /// <returns> If data is valid or not </returns>
-        public async Task<IActionResult> SignIn(User user)
+        /// <returns> If sign in data is valid or not </returns>
+        public bool SignIn(User user)
         {
-            var exist = _bookClubContext.Users.Any(u => u.Username.Equals(user.Username));
-
-            if (exist)
+            if (DoesUserExist(user.Email))
             {
                 var passwordHasher = new PasswordHasher();
                 var hashedPassword = passwordHasher.Hash(user.Password);
@@ -71,12 +57,37 @@ namespace BookClubServer.Services
 
                 if (validPassword)
                 {
-                    OkResult ok = new OkResult();
-                    return ok;
+                    return true;
                 }
             }
 
-            return null;
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if user exists in database already
+        /// </summary>
+        /// <param name="email"> Email of user </param>
+        /// <returns> If user exists or not </returns>
+        public bool DoesUserExist(string email)
+        {
+            return _bookClubContext.Users.Any(u => u.Email.Equals(email));
+        }
+
+        /// <summary>
+        /// Checks if entered password is strong or not
+        /// </summary>
+        /// <param name="password"> Password to check </param>
+        /// <returns> If password is strong or not </returns>
+        public bool IsStrongPassword(string password)
+        {
+            if (password.Length < 8 || !password.Contains(@"/.[!,@,#,$,%,^,&,*,?,_,~,-,£,(,)]/") || 
+               !password.Contains("[A-Z]") || !password.Contains("[a-z]") || !password.Contains("[0-9]"))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
