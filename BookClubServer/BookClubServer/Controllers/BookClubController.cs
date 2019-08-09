@@ -25,6 +25,12 @@ namespace BookClubServer.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser([FromBody] UserCreateModel userCreateModel)
         {
+            if (!_bookClubServices.IsValidEmail(userCreateModel.Email))
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return new JsonResult($"{userCreateModel.Email} is not a valid email.");
+            }
+
             if (_bookClubServices.DoesUserExist(userCreateModel.Email))
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;

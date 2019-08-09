@@ -2,6 +2,7 @@
 using BookClubServer.Helpers;
 using System;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -90,6 +91,25 @@ namespace BookClubServer.Services
             var hasNumbers = new Regex(@"[0-9]");
 
             return hasMinEightChars && hasSpecialChar && hasUpperChar.IsMatch(password) && hasLowerChar.IsMatch(password) && hasNumbers.IsMatch(password);
+        }
+
+        /// <summary>
+        /// Checks if entered email is valid
+        /// </summary>
+        /// <param name="email"> Email to check </param>
+        /// <returns> If email is valid or not </returns>
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                MailAddress mail = new MailAddress(email);
+
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }

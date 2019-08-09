@@ -33,6 +33,11 @@ namespace BookClubServer.Services
         /// <returns> If passwrod is strong or not </returns>
         bool IsStrongPassword(string password);
 
-        // TODO: Make method to check if email is a valid email
+        /// <summary>
+        /// Checks if email is valid
+        /// </summary>
+        /// <param name="email"> Email to check </param>
+        /// <returns> If email is valid or not </returns>
+        bool IsValidEmail(string email);
     }
 }
