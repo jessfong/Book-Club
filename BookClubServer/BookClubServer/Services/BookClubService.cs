@@ -1,6 +1,8 @@
 ﻿using BookClubServer.Data;
 using BookClubServer.Helpers;
+using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookClubServer.Services
@@ -81,13 +83,13 @@ namespace BookClubServer.Services
         /// <returns> If password is strong or not </returns>
         public bool IsStrongPassword(string password)
         {
-            if (password.Length < 8 || !password.Contains(@"/.[!,@,#,$,%,^,&,*,?,_,~,-,£,(,)]/") || 
-               !password.Contains("[A-Z]") || !password.Contains("[a-z]") || !password.Contains("[0-9]"))
-            {
-                return false;
-            }
+            var hasMinEightChars = password.Length >= 8;
+            var hasSpecialChar = password.Any(ch => !char.IsLetterOrDigit(ch));
+            var hasUpperChar = new Regex(@"[A-Z]");
+            var hasLowerChar = new Regex(@"[a-z]");
+            var hasNumbers = new Regex(@"[0-9]");
 
-            return true;
+            return hasMinEightChars && hasSpecialChar && hasUpperChar.IsMatch(password) && hasLowerChar.IsMatch(password) && hasNumbers.IsMatch(password);
         }
     }
 }
