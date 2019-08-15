@@ -13,7 +13,7 @@ namespace BookClubServer.Data
 
         [Required]
         public string Password { get; set; }
-        
+
         public virtual List<BookClub> BookClubs { get; set; }
     }
 }

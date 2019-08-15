@@ -1,5 +1,7 @@
 ﻿using BookClubServer.Data;
 using BookClubServer.Helpers;
+using BookClubServer.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Net.Mail;
@@ -49,7 +51,7 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="user"> Entered username and password </param>
         /// <returns> If sign in data is valid or not </returns>
-        public bool SignIn(User user)
+        public User SignIn(User user)
         {
             if (DoesUserExist(user.Email))
             {
@@ -60,11 +62,11 @@ namespace BookClubServer.Services
 
                 if (validPassword)
                 {
-                    return true;
+                    return _bookClubContext.Users.Include(u => u.BookClubs).First(u => u.Email.Equals(user.Email));
                 }
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -110,6 +112,31 @@ namespace BookClubServer.Services
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Creates a new book club 
+        /// </summary>
+        /// <param name="bookClubCreateModel"> Data to create new book club with </param>
+        /// <returns> A new book club </returns>
+        public async Task<BookClub> CreateBookClubAsync(BookClubCreateModel bookClubCreateModel)
+        {
+            var newBookClub = new BookClub
+            {
+                AdminId = bookClubCreateModel.AdminId,
+                Name = bookClubCreateModel.Name
+            };
+
+            await _bookClubContext.BookClubs.AddAsync(newBookClub);
+
+            await _bookClubContext.SaveChangesAsync();
+
+            int bookClubId = newBookClub.ID;
+
+            var bookClub = _bookClubContext.BookClubs.First(b => b.ID.Equals(bookClubId));
+
+            return bookClub;
+
         }
     }
 }

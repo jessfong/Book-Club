@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using BookClubServer.Data;
+using BookClubServer.Models;
 using BookClubServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,13 +60,33 @@ namespace BookClubServer.Controllers
         {
             var result = _bookClubServices.SignIn(user);
 
-            if (result)
+            if (result == null)
             {
-                return Ok();
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("User was not found");
             }
 
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return new JsonResult("User was not found");
+            return Ok();
+        }
+
+        /// <summary>
+        /// Creates a new book club after checking if user is signed in
+        /// </summary>
+        /// <param name="bookClubCreateModel"> Data to create book club with </param>
+        /// <returns> A new book club </returns>
+        public async Task<IActionResult> CreateBookClub(BookClubCreateModel bookClubCreateModel)
+        {
+            var result = _bookClubServices.SignIn(bookClubCreateModel.getUser());
+            if (result == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("User was not found");
+            }
+
+            bookClubCreateModel.AdminId = result.ID;
+            BookClub bookClub = await _bookClubServices.CreateBookClubAsync(bookClubCreateModel);
+
+            return new JsonResult(bookClub);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BookClubServer.Data;
+using BookClubServer.Models;
 using System.Threading.Tasks;
 
 namespace BookClubServer.Services
@@ -17,7 +18,7 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="user"> User's entered data </param>
         /// <returns> If user is valid or not </returns>
-        bool SignIn(User user);
+        User SignIn(User user);
 
         /// <summary>
         /// Checks if user already exists
@@ -39,5 +40,12 @@ namespace BookClubServer.Services
         /// <param name="email"> Email to check </param>
         /// <returns> If email is valid or not </returns>
         bool IsValidEmail(string email);
+
+        /// <summary>
+        /// Creates new book club
+        /// </summary>
+        /// <param name="bookClubCreateModel"> Data to create new book club with </param>
+        /// <returns> A new book club </returns>
+        Task<BookClub> CreateBookClubAsync(BookClubCreateModel bookClubCreateModel);
     }
 }
