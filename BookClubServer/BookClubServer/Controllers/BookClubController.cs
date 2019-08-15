@@ -88,5 +88,29 @@ namespace BookClubServer.Controllers
 
             return new JsonResult(bookClub);
         }
+
+        /// <summary>
+        /// Checks if user is signed in then deletes specified book club
+        /// </summary>
+        /// <param name="bookClub"> Book club to be deleted </param>
+        /// <returns> If the book club was deleted or not </returns>
+        public async Task<IActionResult> DeleteBookClub(BookClub bookClub)
+        {
+            // TODO: Check if user is signed in (will need to change signin method to recieve more models)
+
+            var clubDeleted = await _bookClubServices.DeleteBookClubAsync(bookClub);
+
+            switch (clubDeleted)
+            {
+                case -1:
+                    return new JsonResult($"The book club with name {bookClub.Name}, could not be found.");
+                case 0:
+                    return Ok();
+                case 1:
+                    return new JsonResult($"There was an error deleting {bookClub.Name}");
+            }
+
+            return new JsonResult($"There was an error deleting {bookClub.Name}");
+        }
     }
 }

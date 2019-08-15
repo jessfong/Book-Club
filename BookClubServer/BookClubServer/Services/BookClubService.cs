@@ -138,5 +138,33 @@ namespace BookClubServer.Services
             return bookClub;
 
         }
+
+        /// <summary>
+        /// Deletes a book club
+        /// </summary>
+        /// <param name="bookClub"> Book club to delete </param>
+        /// <returns> If the book club was deleted or not </returns>
+        public async Task<int> DeleteBookClubAsync(BookClub bookClub)
+        {
+            var clubToDelete = await _bookClubContext.BookClubs.FirstOrDefaultAsync(b => b.ID.Equals(bookClub.ID));
+
+            if (clubToDelete == null)
+            {
+                return -1;
+            }
+
+            var bookDeleted = _bookClubContext.BookClubs.Remove(clubToDelete);
+
+            await _bookClubContext.SaveChangesAsync();
+
+            var deletedClub = _bookClubContext.BookClubs.Find(clubToDelete.ID);
+
+            if (deletedClub == null)
+            {
+                return 0;
+            }
+
+            return 1;
+        }
     }
 }

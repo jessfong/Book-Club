@@ -47,5 +47,12 @@ namespace BookClubServer.Services
         /// <param name="bookClubCreateModel"> Data to create new book club with </param>
         /// <returns> A new book club </returns>
         Task<BookClub> CreateBookClubAsync(BookClubCreateModel bookClubCreateModel);
+
+        /// <summary>
+        /// Deletes book clubs
+        /// </summary>
+        /// <param name="bookClub"> Book club that will be deleted </param>
+        /// <returns> If book club was deleted or not </returns>
+        Task<int> DeleteBookClubAsync(BookClub bookClub);
     }
 }
