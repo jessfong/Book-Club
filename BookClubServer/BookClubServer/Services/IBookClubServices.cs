@@ -54,5 +54,12 @@ namespace BookClubServer.Services
         /// <param name="bookClub"> Book club that will be deleted </param>
         /// <returns> If book club was deleted or not </returns>
         Task<int> DeleteBookClubAsync(BookClub bookClub);
+
+        /// <summary>
+        /// Retrieves a user
+        /// </summary>
+        /// <param name="userId"> User to return </param>
+        /// <returns> User ore null if user doesn't exist </returns>
+        Task<User> RetrieveUser(int userId);
     }
 }

@@ -75,8 +75,10 @@ namespace BookClubServer.Controllers
         /// <param name="bookClubCreateModel"> Data to create book club with </param>
         /// <returns> A new book club </returns>
         public async Task<IActionResult> CreateBookClub(BookClubCreateModel bookClubCreateModel)
-        {
-            var result = _bookClubServices.SignIn(bookClubCreateModel.getUser());
+        {            
+            var user = await _bookClubServices.RetrieveUser(bookClubCreateModel.AdminId);
+
+            var result = _bookClubServices.SignIn(user);
             if (result == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -96,7 +98,14 @@ namespace BookClubServer.Controllers
         /// <returns> If the book club was deleted or not </returns>
         public async Task<IActionResult> DeleteBookClub(BookClub bookClub)
         {
-            // TODO: Check if user is signed in (will need to change signin method to recieve more models)
+            var user = await _bookClubServices.RetrieveUser(bookClub.AdminId);
+
+            var result = _bookClubServices.SignIn(user);
+            if (result == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("User was not found");
+            }
 
             var clubDeleted = await _bookClubServices.DeleteBookClubAsync(bookClub);
 

@@ -53,16 +53,19 @@ namespace BookClubServer.Services
         /// <returns> If sign in data is valid or not </returns>
         public User SignIn(User user)
         {
-            if (DoesUserExist(user.Email))
+            if (user != null)
             {
-                var passwordHasher = new PasswordHasher();
-                var hashedPassword = passwordHasher.Hash(user.Password);
-
-                var validPassword = passwordHasher.Verify(user.Password, hashedPassword);
-
-                if (validPassword)
+                if (DoesUserExist(user.Email))
                 {
-                    return _bookClubContext.Users.Include(u => u.BookClubs).First(u => u.Email.Equals(user.Email));
+                    var passwordHasher = new PasswordHasher();
+                    var hashedPassword = passwordHasher.Hash(user.Password);
+
+                    var validPassword = passwordHasher.Verify(user.Password, hashedPassword);
+
+                    if (validPassword)
+                    {
+                        return _bookClubContext.Users.Include(u => u.BookClubs).First(u => u.Email.Equals(user.Email));
+                    }
                 }
             }
 
@@ -165,6 +168,18 @@ namespace BookClubServer.Services
             }
 
             return 1;
+        }
+
+        /// <summary>
+        /// Retrieves a user
+        /// </summary>
+        /// <param name="userId"> User to retrieve </param>
+        /// <returns> User or null if user doesn't exist </returns>
+        public async Task<User> RetrieveUser(int userId)
+        {
+            var user = await _bookClubContext.Users.FirstOrDefaultAsync(u => u.ID.Equals(userId));
+
+            return user;
         }
     }
 }
