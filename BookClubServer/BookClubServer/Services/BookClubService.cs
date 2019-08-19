@@ -39,6 +39,8 @@ namespace BookClubServer.Services
 
             await _bookClubContext.SaveChangesAsync();
 
+
+            // TODO: retrive user from database and return that instead of returning a newly created user
             return new User
             {
                 Email = newUser.Email,
@@ -180,6 +182,31 @@ namespace BookClubServer.Services
             var user = await _bookClubContext.Users.FirstOrDefaultAsync(u => u.ID.Equals(userId));
 
             return user;
+        }
+
+        /// <summary>
+        /// Creates an invite
+        /// </summary>
+        /// <param name="inviteCreateModel"> Invite to create </param>
+        /// <returns> A new invitation </returns>
+        public async Task<Invite> CreateInviteAsync(InviteCreateModel inviteCreateModel)
+        {
+            var newInvite = new Invite
+            {
+                SenderId = inviteCreateModel.SenderId,
+                RecieverId = inviteCreateModel.RecieverId,
+                BookClubId = inviteCreateModel.BookClubId
+            };
+
+            await _bookClubContext.Invites.AddAsync(newInvite);
+
+            await _bookClubContext.SaveChangesAsync();
+
+            int inviteId = newInvite.ID;
+
+            var invite = _bookClubContext.Invites.First(i => i.ID.Equals(inviteId));
+
+            return invite;
         }
     }
 }

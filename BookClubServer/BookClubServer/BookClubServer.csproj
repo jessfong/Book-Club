@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20190810195420_ModifiedBookClubId.Designer.cs" />
     <Compile Remove="Migrations\20190810202046_AddBackBookClubTable.cs" />
     <Compile Remove="Migrations\20190810202046_AddBackBookClubTable.Designer.cs" />
+    <Compile Remove="Migrations\20190818013857_CreatedInviteTable.cs" />
+    <Compile Remove="Migrations\20190818013857_CreatedInviteTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

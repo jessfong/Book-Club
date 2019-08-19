@@ -61,5 +61,12 @@ namespace BookClubServer.Services
         /// <param name="userId"> User to return </param>
         /// <returns> User ore null if user doesn't exist </returns>
         Task<User> RetrieveUser(int userId);
+
+        /// <summary>
+        /// Creates an invite
+        /// </summary>
+        /// <param name="inviteCreateModel"> Invite to create </param>
+        /// <returns> A new invitation  </returns>
+        Task<Invite> CreateInviteAsync(InviteCreateModel inviteCreateModel);
     }
 }

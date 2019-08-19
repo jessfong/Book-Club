@@ -1,6 +1,4 @@
-﻿using BookClubServer.Data;
-
-namespace BookClubServer.Models
+﻿namespace BookClubServer.Models
 {
     public class UserCreateModel
     {
