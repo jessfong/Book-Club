@@ -39,13 +39,11 @@ namespace BookClubServer.Services
 
             await _bookClubContext.SaveChangesAsync();
 
+            int userId = newUser.ID;
 
-            // TODO: retrive user from database and return that instead of returning a newly created user
-            return new User
-            {
-                Email = newUser.Email,
-                Password = newUser.Password
-            };
+            var user = _bookClubContext.Users.First(u => u.ID.Equals(userId));
+
+            return user;
         }
         
         /// <summary>
@@ -141,7 +139,6 @@ namespace BookClubServer.Services
             var bookClub = _bookClubContext.BookClubs.First(b => b.ID.Equals(bookClubId));
 
             return bookClub;
-
         }
 
         /// <summary>
