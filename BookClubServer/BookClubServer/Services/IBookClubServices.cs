@@ -68,5 +68,14 @@ namespace BookClubServer.Services
         /// <param name="inviteCreateModel"> Invite to create </param>
         /// <returns> A new invitation  </returns>
         Task<Invite> CreateInviteAsync(InviteCreateModel inviteCreateModel);
+
+        Task<bool> AcceptInviteAsync(AcceptInviteModel acceptInviteModel);
+
+        /// <summary>
+        /// Checks if user sending invite is the book club's admin
+        /// </summary>
+        /// <param name="inviteCreateModel"> Data to create invitation </param>
+        /// <returns> If user is the club admin or not </returns>
+        bool IsBookClubAdmin(InviteCreateModel inviteCreateModel);
     }
 }
