@@ -6,6 +6,8 @@ namespace BookClubServer.Data
 {
     public class Invite
     {
+        // TODO: Add int MeetingID so that users can send invites to meetings
+        
         [Key]
         public int ID { get; set; }
 

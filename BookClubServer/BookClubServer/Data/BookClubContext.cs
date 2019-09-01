@@ -14,5 +14,7 @@ namespace BookClubServer.Data
         public DbSet<BookClub> BookClubs { get; set; }
 
         public DbSet<Invite> Invites { get; set; }
+
+        public DbSet<Member> Members { get; set; }
     }
 }

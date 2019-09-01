@@ -1,6 +1,6 @@
 ﻿namespace BookClubServer.Models
 {
-    public class BookClubCreateModel
+    public class BookClubCreateModel : UserCreateModel
     {
         public int AdminId { get; set; }
 

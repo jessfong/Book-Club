@@ -205,5 +205,55 @@ namespace BookClubServer.Services
 
             return invite;
         }
+
+        public async Task<bool> AcceptInviteAsync(AcceptInviteModel acceptInviteModel)
+        {
+            var invitation =  _bookClubContext.Invites.FirstOrDefault(i => i.ID.Equals(acceptInviteModel.InviteId));
+
+            if (invitation != null)
+            {
+                var bookClub = await _bookClubContext.BookClubs.FirstAsync(b => b.ID.Equals(invitation.BookClubId));
+                var reciever = await _bookClubContext.Users.FirstAsync(r => r.ID.Equals(invitation.RecieverId));
+
+                var newMember = new Member
+                {
+                    BookClubId = bookClub.ID,
+                    UserId = reciever.ID
+                };
+
+                await _bookClubContext.Members.AddAsync(newMember);
+
+                await _bookClubContext.SaveChangesAsync();
+
+                int memberId = newMember.ID;
+
+                var bookClubAdded = _bookClubContext.Members.Any(m => m.ID.Equals(memberId));                
+
+                if (bookClubAdded)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if user sending invite is the book club's admin
+        /// </summary>
+        /// <param name="inviteCreateModel"> Data to create invitation </param>
+        /// <returns> If user is the club admin or not </returns>
+        public bool IsBookClubAdmin(InviteCreateModel inviteCreateModel)
+        {
+            var sender = _bookClubContext.Users.First(u => u.ID.Equals(inviteCreateModel.SenderId));
+            var bookClub = _bookClubContext.BookClubs.First(b => b.ID.Equals(inviteCreateModel.BookClubId));
+
+            var usersClubs = _bookClubContext.Users.Include(u => u.BookClubs).First(u => u.ID.Equals(inviteCreateModel.SenderId));
+            if (usersClubs.BookClubs.Contains(bookClub))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
-}
+}                                                                                       

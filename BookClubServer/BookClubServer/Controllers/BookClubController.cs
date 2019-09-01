@@ -140,6 +140,13 @@ namespace BookClubServer.Controllers
                 return new JsonResult("User sending invite was not found");
             }
 
+            var userIsAdmin = _bookClubServices.IsBookClubAdmin(inviteCreateModel);
+            if (!userIsAdmin)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("User is not authorized to invite other users.");
+            }
+            
             if (reciever != null)
             {
                 var recieverEmail = _bookClubServices.DoesUserExist(reciever.Email);
@@ -153,6 +160,27 @@ namespace BookClubServer.Controllers
 
             Response.StatusCode = (int)HttpStatusCode.NotFound;
             return new JsonResult("User recieving invite was not found");
+        }
+
+        public async Task<IActionResult> AcceptInvite(AcceptInviteModel acceptInviteModel)
+        {
+            var result = _bookClubServices.SignIn(acceptInviteModel.GetUser());
+            if (result == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("Username or password is invalid.");
+            }
+            
+            // Already accepted?
+
+            var inviteAccepted = await _bookClubServices.AcceptInviteAsync(acceptInviteModel);
+                
+            if (inviteAccepted)
+            {
+                return Ok();
+            }
+
+            return new JsonResult("User could not be found");
         }
     }
 }
