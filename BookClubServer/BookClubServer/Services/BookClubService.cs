@@ -57,10 +57,11 @@ namespace BookClubServer.Services
             {
                 if (DoesUserExist(user.Email))
                 {
-                    var passwordHasher = new PasswordHasher();
-                    var hashedPassword = passwordHasher.Hash(user.Password);
+                    // TODO: All passwrods entered are considered incorrect
+                    var userFromDatabase = _bookClubContext.Users.First(u => u.Email.Equals(user.Email));
 
-                    var validPassword = passwordHasher.Verify(user.Password, hashedPassword);
+                    var passwordHasher = new PasswordHasher();
+                    var validPassword = passwordHasher.Verify(user.Password, userFromDatabase.Password);
 
                     if (validPassword)
                     {
@@ -234,6 +235,7 @@ namespace BookClubServer.Services
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -255,5 +257,52 @@ namespace BookClubServer.Services
 
             return false;
         }
+
+        /// <summary>
+        /// Checks if an invite exists
+        /// </summary>
+        /// <param name="existingInviteModel"> Invite details </param>
+        /// <returns> If an existing invite exists with the same details </returns>
+        public bool InviteExists(ExistingInviteModel existingInviteModel)
+        {
+            var invite = new Invite{ };
+            
+            if (existingInviteModel.SenderId != 0 && existingInviteModel.RecieverId != 0)
+            {
+                invite = _bookClubContext.Invites.FirstOrDefault(i => i.SenderId == existingInviteModel.SenderId && i.RecieverId == existingInviteModel.RecieverId && i.BookClubId == existingInviteModel.BookClubId);
+            }
+            else
+            {
+                invite = _bookClubContext.Invites.FirstOrDefault(i => i.ID.Equals(existingInviteModel.InviteId));
+            }
+
+            if (invite != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if an invite has already been accepted
+        /// </summary>
+        /// <param name="acceptInviteModel"> Invite details </param>
+        /// <returns> If the invite has already been accepted </returns>
+        public bool userAlreadyMember(AcceptInviteModel acceptInviteModel)
+        {            
+            if (acceptInviteModel.InviteId != 0)
+            {
+                var invite = _bookClubContext.Invites.First(i => i.ID.Equals(acceptInviteModel.InviteId));
+
+                var member = _bookClubContext.Members.FirstOrDefault(m => m.BookClubId == invite.BookClubId && m.UserId == invite.RecieverId);
+                if (member != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
-}                                                                                       
+}

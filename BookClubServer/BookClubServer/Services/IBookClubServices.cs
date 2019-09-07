@@ -60,7 +60,7 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="userId"> User to return </param>
         /// <returns> User ore null if user doesn't exist </returns>
-        Task<User> RetrieveUser(int userId);
+        Task<User> RetrieveUser(int userId);                            // Check if still being used
 
         /// <summary>
         /// Creates an invite
@@ -77,5 +77,19 @@ namespace BookClubServer.Services
         /// <param name="inviteCreateModel"> Data to create invitation </param>
         /// <returns> If user is the club admin or not </returns>
         bool IsBookClubAdmin(InviteCreateModel inviteCreateModel);
+
+        /// <summary>
+        /// Checks if an invite exists in the database
+        /// </summary>
+        /// <param name="existingInviteModel"> Invite details </param>
+        /// <returns> If an existing invite exists with the same details </returns>
+        bool InviteExists(ExistingInviteModel existingInviteModel);
+
+        /// <summary>
+        /// Checks if an invite has already been accepted
+        /// </summary>
+        /// <param name="acceptInviteModel"> Invite details </param>
+        /// <returns> If the invite has already been accepted </returns>
+        bool userAlreadyMember(AcceptInviteModel acceptInviteModel);                
     }
 }
