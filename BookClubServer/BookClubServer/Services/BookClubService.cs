@@ -55,9 +55,9 @@ namespace BookClubServer.Services
         {
             if (user != null)
             {
-                if (DoesUserExist(user.Email))
+                if (RetrieveUser(user.ID) == null)
                 {
-                    // TODO: All passwrods entered are considered incorrect
+                    // TODO: All passwords entered are considered incorrect
                     var userFromDatabase = _bookClubContext.Users.First(u => u.Email.Equals(user.Email));
 
                     var passwordHasher = new PasswordHasher();
@@ -81,6 +81,27 @@ namespace BookClubServer.Services
         public bool DoesUserExist(string email)
         {
             return _bookClubContext.Users.Any(u => u.Email.Equals(email));
+        }
+        
+        /// <summary>
+        /// Checks if book club exists in database already
+        /// </summary>
+        /// <param name="bookClubId"> Id of book club </param>
+        /// <returns> If book club exists or not </returns>
+        public bool DoesBookClubExist(int bookClubId)
+        {
+            return _bookClubContext.BookClubs.Any(b => b.ID.Equals(bookClubId));
+        }
+
+        /// <summary>
+        /// Retrieves a user
+        /// </summary>
+        /// <param name="userId"> User to retrieve </param>
+        /// <returns> User or null if user doesn't exist </returns>
+        public async Task<User> RetrieveUser(int userId)
+        {
+            return await _bookClubContext.Users.FirstOrDefaultAsync(u => u.ID.Equals(userId));
+
         }
 
         /// <summary>
@@ -171,18 +192,6 @@ namespace BookClubServer.Services
         }
 
         /// <summary>
-        /// Retrieves a user
-        /// </summary>
-        /// <param name="userId"> User to retrieve </param>
-        /// <returns> User or null if user doesn't exist </returns>
-        public async Task<User> RetrieveUser(int userId)
-        {
-            var user = await _bookClubContext.Users.FirstOrDefaultAsync(u => u.ID.Equals(userId));
-
-            return user;
-        }
-
-        /// <summary>
         /// Creates an invite
         /// </summary>
         /// <param name="inviteCreateModel"> Invite to create </param>
@@ -207,6 +216,11 @@ namespace BookClubServer.Services
             return invite;
         }
 
+        /// <summary>
+        /// Accepts invite and adds user as a member of that book club
+        /// </summary>
+        /// <param name="acceptInviteModel"> Invite to accept </param>
+        /// <returns> If invite was accepted </returns>
         public async Task<bool> AcceptInviteAsync(AcceptInviteModel acceptInviteModel)
         {
             var invitation =  _bookClubContext.Invites.FirstOrDefault(i => i.ID.Equals(acceptInviteModel.InviteId));

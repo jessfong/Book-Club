@@ -45,9 +45,7 @@ namespace BookClubServer.Controllers
                     $"one lowercase letter, one number, and a non-alphanumeric character.");
             }
 
-            User user = await _bookClubServices.RegisterNewUserAsync(userCreateModel);
-
-            return new JsonResult(user);
+            return new JsonResult(await _bookClubServices.RegisterNewUserAsync(userCreateModel));
         }
 
         /// <summary>
@@ -75,20 +73,17 @@ namespace BookClubServer.Controllers
         /// <param name="bookClubCreateModel"> Data to create book club with </param>
         /// <returns> A new book club </returns>
         public async Task<IActionResult> CreateBookClub(BookClubCreateModel bookClubCreateModel)
-        {            
-            var user = await _bookClubServices.RetrieveUser(bookClubCreateModel.AdminId);
-
-            var result = _bookClubServices.SignIn(user);
+        {
+            var result = _bookClubServices.SignIn(bookClubCreateModel.GetUser());
             if (result == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return new JsonResult("User was not found.");
+                return new JsonResult("Username or password is invalid.");
             }
 
             bookClubCreateModel.AdminId = result.ID;
-            BookClub bookClub = await _bookClubServices.CreateBookClubAsync(bookClubCreateModel);
 
-            return new JsonResult(bookClub);
+            return new JsonResult(await _bookClubServices.CreateBookClubAsync(bookClubCreateModel));
         }
 
         /// <summary>
@@ -137,10 +132,13 @@ namespace BookClubServer.Controllers
                 return new JsonResult("User sending invite was not found.");
             }*/
             
-            
-            // TODO: Check if sending user exists
             var sender = await _bookClubServices.RetrieveUser(inviteCreateModel.SenderId);
-                        
+            if (sender == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("User sending invite was not found.");
+            }
+
             var reciever = await _bookClubServices.RetrieveUser(inviteCreateModel.RecieverId);
             if (reciever == null)
             {
@@ -151,7 +149,13 @@ namespace BookClubServer.Controllers
             if (sender.Email == reciever.Email)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return new JsonResult("Sender adn reciever can't be the same.");
+                return new JsonResult("Sender and reciever can't be the same.");
+            }
+
+            if (!_bookClubServices.DoesBookClubExist(inviteCreateModel.BookClubId))
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new JsonResult("Book club was not found.");
             }
 
             var userIsAdmin = _bookClubServices.IsBookClubAdmin(inviteCreateModel);
@@ -175,15 +179,7 @@ namespace BookClubServer.Controllers
                 return new JsonResult("Invite already exists.");
             }
 
-            var recieverEmail = _bookClubServices.DoesUserExist(reciever.Email);
-            if (recieverEmail)
-            {
-                var invite = await _bookClubServices.CreateInviteAsync(inviteCreateModel);
-
-                return new JsonResult(invite);
-            }
-
-            return new JsonResult("User was not found.");
+            return new JsonResult(await _bookClubServices.CreateInviteAsync(inviteCreateModel));
         }
 
         public async Task<IActionResult> AcceptInvite(AcceptInviteModel acceptInviteModel)

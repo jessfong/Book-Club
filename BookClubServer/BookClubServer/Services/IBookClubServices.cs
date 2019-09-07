@@ -28,6 +28,13 @@ namespace BookClubServer.Services
         bool DoesUserExist(string email);
 
         /// <summary>
+        /// Checks if book club exists in database already
+        /// </summary>
+        /// <param name="bookClubId"> Id of book club </param>
+        /// <returns> If book club exists or not </returns>
+        bool DoesBookClubExist(int bookClubId);
+
+        /// <summary>
         /// Checks if entered pasword is strong enough
         /// </summary>
         /// <param name="password"> Password to check </param>
@@ -60,7 +67,7 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="userId"> User to return </param>
         /// <returns> User ore null if user doesn't exist </returns>
-        Task<User> RetrieveUser(int userId);                            // Check if still being used
+        Task<User> RetrieveUser(int userId);
 
         /// <summary>
         /// Creates an invite
@@ -69,6 +76,11 @@ namespace BookClubServer.Services
         /// <returns> A new invitation  </returns>
         Task<Invite> CreateInviteAsync(InviteCreateModel inviteCreateModel);
 
+        /// <summary>
+        /// Accepts invite and adds user as a member of that book club
+        /// </summary>
+        /// <param name="acceptInviteModel"> Invite to accept </param>
+        /// <returns> If invite was accepted </returns>
         Task<bool> AcceptInviteAsync(AcceptInviteModel acceptInviteModel);
 
         /// <summary>
@@ -90,6 +102,6 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="acceptInviteModel"> Invite details </param>
         /// <returns> If the invite has already been accepted </returns>
-        bool userAlreadyMember(AcceptInviteModel acceptInviteModel);                
+        bool userAlreadyMember(AcceptInviteModel acceptInviteModel);
     }
 }
