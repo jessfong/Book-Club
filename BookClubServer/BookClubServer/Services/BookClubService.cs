@@ -1,5 +1,4 @@
 ﻿using BookClubServer.Data;
-using BookClubServer.Helpers;
 using BookClubServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace BookClubServer.Services
 {
@@ -26,8 +26,7 @@ namespace BookClubServer.Services
         /// <returns> New user </returns>
         public async Task<User> RegisterNewUserAsync(UserCreateModel userCreateModel)
         {
-            var passwordHasher = new PasswordHasher();
-            var hash = passwordHasher.Hash(userCreateModel.Password);
+            var hash = Crypto.HashPassword(userCreateModel.Password);
 
             var newUser = new User
             { 
@@ -55,13 +54,11 @@ namespace BookClubServer.Services
         {
             if (user != null)
             {
-                if (RetrieveUser(user.ID) == null)
+                if (DoesUserExist(user.Email) == true)
                 {
-                    // TODO: All passwords entered are considered incorrect
                     var userFromDatabase = _bookClubContext.Users.First(u => u.Email.Equals(user.Email));
 
-                    var passwordHasher = new PasswordHasher();
-                    var validPassword = passwordHasher.Verify(user.Password, userFromDatabase.Password);
+                    var validPassword = Crypto.VerifyHashedPassword(userFromDatabase.Password, user.Password);
 
                     if (validPassword)
                     {
@@ -101,7 +98,6 @@ namespace BookClubServer.Services
         public async Task<User> RetrieveUser(int userId)
         {
             return await _bookClubContext.Users.FirstOrDefaultAsync(u => u.ID.Equals(userId));
-
         }
 
         /// <summary>
@@ -168,9 +164,9 @@ namespace BookClubServer.Services
         /// </summary>
         /// <param name="bookClub"> Book club to delete </param>
         /// <returns> If the book club was deleted or not </returns>
-        public async Task<int> DeleteBookClubAsync(BookClub bookClub)
+        public async Task<int> DeleteBookClubAsync(DeleteBookClubModel deleteBookClubModel)
         {
-            var clubToDelete = await _bookClubContext.BookClubs.FirstOrDefaultAsync(b => b.ID.Equals(bookClub.ID));
+            var clubToDelete = await _bookClubContext.BookClubs.FirstOrDefaultAsync(b => b.ID.Equals(deleteBookClubModel.ID));
 
             if (clubToDelete == null)
             {

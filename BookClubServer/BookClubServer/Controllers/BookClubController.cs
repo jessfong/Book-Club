@@ -26,6 +26,12 @@ namespace BookClubServer.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser([FromBody] UserCreateModel userCreateModel)
         {
+            if (userCreateModel.Email.Equals("")|| userCreateModel.Password.Equals(""))
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return new JsonResult("Email and password must not be empty.");
+            }
+
             if (!_bookClubServices.IsValidEmail(userCreateModel.Email))
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -91,9 +97,10 @@ namespace BookClubServer.Controllers
         /// </summary>
         /// <param name="bookClub"> Book club to be deleted </param>
         /// <returns> If the book club was deleted or not </returns>
-        public async Task<IActionResult> DeleteBookClub(BookClub bookClub)
+        public async Task<IActionResult> DeleteBookClub(DeleteBookClubModel deleteBookClubModel)
         {
-            var user = await _bookClubServices.RetrieveUser(bookClub.AdminId);
+            // TODO: 
+            var user = await _bookClubServices.RetrieveUser(deleteBookClubModel.Email);
 
             var result = _bookClubServices.SignIn(user);
             if (result == null)
@@ -125,14 +132,15 @@ namespace BookClubServer.Controllers
         /// <returns> A new invite </returns>
         public async Task<IActionResult> CreateInvite(InviteCreateModel inviteCreateModel)
         {
-            /*var result = _bookClubServices.SignIn(sender);
+            var sender = await _bookClubServices.RetrieveUser(inviteCreateModel.SenderId);
+
+            var result = _bookClubServices.SignIn(sender);
             if (result == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return new JsonResult("User sending invite was not found.");
-            }*/
+            }            
             
-            var sender = await _bookClubServices.RetrieveUser(inviteCreateModel.SenderId);
             if (sender == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -184,12 +192,12 @@ namespace BookClubServer.Controllers
 
         public async Task<IActionResult> AcceptInvite(AcceptInviteModel acceptInviteModel)
         {
-            /*var result = _bookClubServices.SignIn(acceptInviteModel.GetUser());
+            var result = _bookClubServices.SignIn(acceptInviteModel.GetUser());
             if (result == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return new JsonResult("Username or password is invalid.");
-            }*/
+            }
 
             var existingInvite = new ExistingInviteModel
             {
