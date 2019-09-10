@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "300368731976",
+    "firebase_url": "https://book-club-7e317.firebaseio.com",
+    "project_id": "book-club-7e317",
+    "storage_bucket": "book-club-7e317.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300368731976:android:c2f9b49eba054ff8f39d7d",
+        "android_client_info": {
+          "package_name": "ca.mohawkcollege.bookclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300368731976-m1ei0h1v18r6ob7mld27kjmt9od3pv47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRcVimCNAtewXBEu2HyRKIsUNWwR7WOrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300368731976-m1ei0h1v18r6ob7mld27kjmt9od3pv47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
