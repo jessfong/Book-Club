@@ -4,22 +4,24 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/signInEmailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Email"
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/signInPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/signInBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/signInBtn" />
 </LinearLayout>

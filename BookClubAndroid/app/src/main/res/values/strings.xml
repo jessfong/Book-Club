@@ -7,4 +7,5 @@
     <string name="createMeetingLocationHint">Location</string>
     <string name="createBookClubFinishBtn">Finish</string>
     <string name="createBookClubAddMembersBtn">Add Members</string>
+    <string name="signInBtn">Sign In</string>
 </resources>
