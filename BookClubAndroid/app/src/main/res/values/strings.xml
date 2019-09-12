@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BookClub</string>
+    <string name="emailEditText">Email</string>
+    <string name="continueBtn">Continue</string>
+    <string name="createBtn">Finish</string>
+    <string name="createMeetingNameHint">Name</string>
+    <string name="createMeetingLocationHint">Location</string>
 </resources>

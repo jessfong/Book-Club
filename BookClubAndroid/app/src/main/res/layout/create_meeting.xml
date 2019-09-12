@@ -4,17 +4,19 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/createMeetingNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:hint="@string/createMeetingNameHint"
+        android:inputType="text" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/createMeetingLocationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/createMeetingLocationHint"
+        android:inputType="text" />
 
 </LinearLayout>
