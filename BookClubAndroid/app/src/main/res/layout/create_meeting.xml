@@ -19,4 +19,16 @@
         android:hint="@string/createMeetingLocationHint"
         android:inputType="text" />
 
+    <Button
+        android:id="@+id/createBookClubAddUsersBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/createBookClubAddMembersBtn" />
+
+    <Button
+        android:id="@+id/createBookClubFinishBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/createBookClubFinishBtn" />
+
 </LinearLayout>

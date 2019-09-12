@@ -4,24 +4,22 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/createInviteBookClubNameEditText"
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Book Club Name"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/createInviteReceiverEmailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Receivver Email"
         android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/createInviteBtn"
+    <EditText
+        android:id="@+id/editText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send" />
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </LinearLayout>
