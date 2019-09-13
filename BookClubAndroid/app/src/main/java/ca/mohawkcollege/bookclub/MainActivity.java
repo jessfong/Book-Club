@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(view.getContext(), "User signed out", Toast.LENGTH_SHORT).show();
-            }
-        });
+                            }
+                        });
             }
         });
 

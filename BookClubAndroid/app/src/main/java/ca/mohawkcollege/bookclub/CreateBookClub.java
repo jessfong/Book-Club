@@ -73,12 +73,18 @@ public class CreateBookClub extends AppCompatActivity {
         BookClub bookClub = new BookClub(bookClubName);
 
         String key = mDatabase.push().getKey();
-        mDatabase.child(key).child(bookClubName).setValue(bookClub)
+        if (key != null) {
+            mDatabase.child(key).child(bookClubName).setValue(bookClub)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(), "book club added", Toast.LENGTH_SHORT).show();
                     }
                 });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "failed adding book club", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
