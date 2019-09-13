@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">BookClub</string>
-    <string name="emailEditText">Email</string>
-    <string name="continueBtn">Continue</string>
-    <string name="createBtn">Finish</string>
-    <string name="createMeetingNameHint">Name</string>
-    <string name="createMeetingLocationHint">Location</string>
-    <string name="createBookClubFinishBtn">Finish</string>
-    <string name="createBookClubAddMembersBtn">Add Members</string>
-    <string name="signInBtn">Sign In</string>
+    <string name="mainWelcomeTextView">Welcome</string>
+    <string name="createBookClubBtn">Create Book Club</string>
+    <string name="signOutBtn">Sign Out</string>
+    <string name="createBookClubNameHint">Name</string>
+    <string name="addMembersBtn">Add Members</string>
 </resources>

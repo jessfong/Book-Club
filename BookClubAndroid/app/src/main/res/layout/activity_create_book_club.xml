@@ -5,24 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".CreateBookClub">
 
-    <TextView
+    <EditText
+        android:id="@+id/createBookClubNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/mainWelcomeTextView"
-        android:textAlignment="center" />
+        android:ems="10"
+        android:hint="@string/createBookClubNameHint"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/createBookClubMembersBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/addMembersBtn" />
 
     <Button
         android:id="@+id/createBookClubBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/createBookClubBtn" />
-
-    <Button
-        android:id="@+id/signOutBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/signOutBtn" />
 
 </LinearLayout>
