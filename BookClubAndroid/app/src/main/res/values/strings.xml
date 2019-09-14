@@ -3,6 +3,6 @@
     <string name="mainWelcomeTextView">Welcome</string>
     <string name="createBookClubBtn">Create Book Club</string>
     <string name="signOutBtn">Sign Out</string>
-    <string name="createBookClubNameHint">Name</string>
     <string name="addMembersBtn">Add Members</string>
+    <string name="createBookClubNameTextView">Book Club Name:</string>
 </resources>
