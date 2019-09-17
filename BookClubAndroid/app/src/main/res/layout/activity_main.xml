@@ -7,21 +7,15 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mainWelcomeTextView"
-        android:textAlignment="center" />
-
     <Button
         android:id="@+id/createBookClubBtn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/createBookClubBtn" />
 
     <Button
         android:id="@+id/signOutBtn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signOutBtn" />
 

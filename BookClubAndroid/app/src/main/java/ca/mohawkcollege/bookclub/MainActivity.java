@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -16,6 +17,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +59,22 @@ public class MainActivity extends AppCompatActivity {
                 RC_SIGN_IN
         );
 
+        // TODO: Load list of book clubs belonging to signed in user
+        Intent intent = new Intent(MainActivity.this, RetrieveClubInfo.class);
+        startActivity(intent);
+
+
+        // TODO: Change button to Floating Action Button
+        // When create book club button is clicked
+        Button createButton = findViewById(R.id.createBookClubBtn);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreateBookClub.class);
+                startActivity(intent);
+            }
+        });
+
         // When sign out button is clicked
         Button button = findViewById(R.id.signOutBtn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -64,16 +87,6 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(view.getContext(), "User signed out", Toast.LENGTH_SHORT).show();
                             }
                         });
-            }
-        });
-
-        // When create book club button is clicked
-        Button createButton = findViewById(R.id.createBookClubBtn);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), CreateBookClub.class);
-                startActivity(intent);
             }
         });
     }
