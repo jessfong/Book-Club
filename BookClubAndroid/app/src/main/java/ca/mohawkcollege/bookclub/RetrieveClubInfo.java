@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,57 +15,64 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class RetrieveClubInfo extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
-    //BookClub bookClub;
 
+    /**
+     * Generates list of current user's book clubs
+     * @param savedInstanceState - saved data from last login
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_club_info);
 
         // Get database references
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("BookClub");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("BookClubs");
 
-        // Set up arrayList, adapter, and listView variables
+        // Set up adapter and listView
         final ListView listView = findViewById(R.id.bookClubListView);
-        final ArrayList<BookClub> arrayList = new ArrayList<BookClub>();
-        final ArrayAdapter<BookClub> arrayAdapter = new ArrayAdapter<BookClub>(this, R.layout.book_club_info, R.id.infoNameTextView, arrayList);
-        //bookClub = new BookClub();
-
-        // TODO: DELETE after debugging
-        Toast.makeText(RetrieveClubInfo.this, "hello", Toast.LENGTH_SHORT).show();
+        final BookClubAdaptor bookClubAdaptor = new BookClubAdaptor(this, R.layout.book_club_info);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
+            /**
+             * Reads and listens for changes that happen to firebase database.
+             * Retrieves each child from BookClubs table and checks if each book club belongs to current user.
+             * If book club belongs to user that book club is added to an arrayList.
+             * When there are no more book clubs in the table the listView is populated with an
+             * arrayAdapter that customizes the look of each view(Ex. textview, imageview, etc) in each listItem.
+             * The listItem is then displayed in the parent view (the listView)
+             * @param dataSnapshot - snapshot of BookClubs table from firebase
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren())
+                for (DataSnapshot child: dataSnapshot.getChildren())
                 {
-                    // TODO: DELETE after debugging
-                    Toast.makeText(RetrieveClubInfo.this, "hello1", Toast.LENGTH_SHORT).show();
+                    BookClub bookClub = child.getValue(BookClub.class);
 
-                    // Converting data snapshot into book club type
-                    BookClub bookClub = ds.getValue(BookClub.class);
+                    if (bookClub == null) {
+                        Toast.makeText(RetrieveClubInfo.this, "Book club error", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                    //Toast.makeText(RetrieveClubInfo.this, firebaseUser.getUid(), Toast.LENGTH_SHORT).show();
-                    if(bookClub.userId == firebaseUser.getUid()){
-                        arrayList.add(bookClub);
+                    if(bookClub.userId.equals(firebaseUser.getUid())){
+                        bookClubAdaptor.add(bookClub);
                     }
                 }
-                listView.setAdapter(arrayAdapter);
+
+                listView.setAdapter(bookClubAdaptor);
                 Toast.makeText(RetrieveClubInfo.this, "Download completed.", Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * Called when there was an error retrieving the BookClubs table from firebase
+             * @param databaseError - error that prevented retrieval of data
+             */
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-
     }
 }

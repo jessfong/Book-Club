@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +39,10 @@ public class CreateBookClub extends AppCompatActivity {
     private Context context;
     private Uri imageFile;
 
+    /**
+     * Gathers data for new book club and writes it to BookClubs table in firebase
+     * @param savedInstanceState - saved data from last login
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,12 @@ public class CreateBookClub extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * Display gallery image in createBookClub view
+     * @param requestCode - code determining where the request came from
+     * @param resultCode - code determining what the result was
+     * @param data - data returned from the activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -93,7 +101,6 @@ public class CreateBookClub extends AppCompatActivity {
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
             imageFile = data.getData();
-
             try {
                 // Display image when user still creating book club
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageFile);
@@ -106,22 +113,26 @@ public class CreateBookClub extends AppCompatActivity {
         }
     }
 
+    // Writing chosen image uri to firebase BookClubs table
     private void uploadImage(final OnUploadImage onUploadImage) {
         StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
         ref.putFile(imageFile)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    /**
+                     * Called when chosen image is successfully uploaded.
+                     * Gets image url from database
+                     * @param taskSnapshot - snapshot of storage
+                     */
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { // Image uploaded here complete
-                        taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() { // To get image url from database
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            /**
+                             * Gets image url from database when done uploading
+                             * @param task
+                             */
                             @Override
-                            public void onComplete(@NonNull Task<Uri> task) { // Got image url from database done
+                            public void onComplete(@NonNull Task<Uri> task) {
                                 if (task.getResult() != null) {
-
-                                    // Use to download images from fire base storage when listing book clubs on home page
-                                    /*Glide.with(context)
-                                            .load(task.getResult())
-                                            .into(imageView);*/
-
                                     onUploadImage.onComplete(task.getResult());
                                 }
                             }
@@ -129,13 +140,18 @@ public class CreateBookClub extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
+                    /**
+                     * Displays error message when image failed to upload
+                     * @param e - error that happened
+                     */
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    // Returns image Uri
     public interface OnUploadImage {
         void onComplete(Uri result);
     }
@@ -143,6 +159,10 @@ public class CreateBookClub extends AppCompatActivity {
     // Add new book club to database
     public void writeNewClub(final String user, final String bookClubName){
         uploadImage(new OnUploadImage() {
+            /**
+             * Writes book club data to database once image uri is retrieved
+             * @param result - result of uploaded record
+             */
             @Override
             public void onComplete(Uri result) {
                 BookClub bookClub = new BookClub(user, bookClubName, result.toString());
