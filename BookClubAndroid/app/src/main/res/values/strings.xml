@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BookClub</string>
     <string name="signOutBtn">Sign Out</string>
-    <string name="addMembersBtn">Add Members</string>
+    <string name="addMembersBtn">Invite Members</string>
     <string name="createBookClubNameTextView">Book Club Name:</string>
     <string name="createBookClubUploadImageBtn">Upload Image</string>
     <string name="createBookClubNameHint">Name of book club</string>
