@@ -3,10 +3,15 @@ package ca.mohawkcollege.bookclub;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,6 +54,8 @@ public class RetrieveClubInfo extends AppCompatActivity {
              */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                bookClubAdaptor.clear();
+
                 for (DataSnapshot child: dataSnapshot.getChildren())
                 {
                     BookClub bookClub = child.getValue(BookClub.class);
@@ -65,6 +72,9 @@ public class RetrieveClubInfo extends AppCompatActivity {
 
                 listView.setAdapter(bookClubAdaptor);
                 Toast.makeText(RetrieveClubInfo.this, "Download completed.", Toast.LENGTH_SHORT).show();
+
+                int numItemsInListView = listView.getAdapter().getCount();
+                Toast.makeText(RetrieveClubInfo.this, "number of items: " + numItemsInListView, Toast.LENGTH_SHORT).show();
             }
 
             /**
@@ -74,5 +84,30 @@ public class RetrieveClubInfo extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+
+
+        // If create new book club is clicked
+        FloatingActionButton createButton = findViewById(R.id.createBookClubBtn);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Directs user to next CreateBookClub activity
+             * @param view - current view
+             */
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreateBookClub.class);
+                startActivity(intent);
+            }
+        });
+
+
+        // If listview item is clicked
+        listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(RetrieveClubInfo.this, "Clicked listview", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

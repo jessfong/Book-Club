@@ -14,6 +14,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_retrieve_club_info);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -56,42 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 RC_SIGN_IN
         );
 
-        // Load list of user's book clubs
-        Intent intent = new Intent(MainActivity.this, RetrieveClubInfo.class);
-        startActivity(intent);
-
-
-        // TODO: Change button to Floating Action Button
-        Button createButton = findViewById(R.id.createBookClubBtn);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Directs user to next CreateBookClub activity
-             * @param view - current view
-             */
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), CreateBookClub.class);
-                startActivity(intent);
-            }
-        });
-
-        Button button = findViewById(R.id.signOutBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Sign out user when signOut button is clicked
-             * @param view - current view
-             */
-            @Override
-            public void onClick(final View view) {
-                AuthUI.getInstance()
-                        .signOut(view.getContext())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(view.getContext(), "User signed out", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
     }
 
     /**
@@ -111,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Toast.makeText(this, "User: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+
+                // Load list of user's book clubs
+                Intent intent = new Intent(MainActivity.this, RetrieveClubInfo.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "User failed", Toast.LENGTH_SHORT).show();
             }

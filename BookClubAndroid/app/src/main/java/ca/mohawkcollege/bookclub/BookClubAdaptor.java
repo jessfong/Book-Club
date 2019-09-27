@@ -44,6 +44,12 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
         bookClubs.add(bookClub);
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+        bookClubs.clear();
+    }
+
     /**
      * Overriding get view method to create a view for each item in the arrayList
      * @param position - record number in the database
