@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="120dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="120dp"
         android:layout_marginBottom="550dp"/>
 
@@ -48,11 +47,25 @@
             android:text="@string/addMembersBtn" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/createMeetingBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="270dp"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/createMeetingBtn" />
+
+        <Button
+            android:id="@+id/deleteClubBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="278dp"
+            android:layout_weight="1"
+            android:text="@string/deleteClubBtn" />
+
     </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="309dp"
+        android:layout_marginTop="420dp"/>
 </RelativeLayout>

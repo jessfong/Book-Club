@@ -165,10 +165,10 @@ public class CreateBookClub extends AppCompatActivity {
              */
             @Override
             public void onComplete(Uri result) {
-                BookClub bookClub = new BookClub(user, bookClubName, result.toString());
-
                 String key = mDatabase.push().getKey();
+
                 if (key != null) {
+                    BookClub bookClub = new BookClub(user, bookClubName, result.toString(), key);
                     mDatabase.child(key).setValue(bookClub);
                 }
                 else{

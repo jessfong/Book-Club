@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                         .build(),
                 RC_SIGN_IN
         );
-
     }
 
     /**

@@ -7,4 +7,6 @@
     <string name="createBookClubNameHint">Name of book club</string>
     <string name="createBookClubInstructionsTextView">Let\'s get started! First, let\'s choose a profile picture for your club! Once that\'s done add a name to your book club and you\'re all set!</string>
     <string name="createBookClubBtn">Create New Book Club</string>
+    <string name="createMeetingBtn">Create Meeting</string>
+    <string name="deleteClubBtn">Delete Club</string>
 </resources>

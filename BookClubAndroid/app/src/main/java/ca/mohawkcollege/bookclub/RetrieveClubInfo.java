@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,12 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RetrieveClubInfo extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
-    ArrayList<String> clubIds = new ArrayList<String>();
+    String recordId = "";
 
     /**
      * Generates list of current user's book clubs
@@ -67,9 +69,6 @@ public class RetrieveClubInfo extends AppCompatActivity {
                 {
                     BookClub bookClub = child.getValue(BookClub.class);
 
-                    String clubId = child.getKey();
-                    clubIds.add(clubId);
-
                     if (bookClub == null) {
                         Toast.makeText(RetrieveClubInfo.this, "Book club error", Toast.LENGTH_SHORT).show();
                         return;
@@ -81,9 +80,6 @@ public class RetrieveClubInfo extends AppCompatActivity {
 
                 listView.setAdapter(bookClubAdaptor);
                 Toast.makeText(RetrieveClubInfo.this, "Download completed.", Toast.LENGTH_SHORT).show();
-
-                int numItemsInListView = listView.getAdapter().getCount();
-                Toast.makeText(RetrieveClubInfo.this, "number of items: " + numItemsInListView, Toast.LENGTH_SHORT).show();
             }
 
             /**
@@ -114,8 +110,10 @@ public class RetrieveClubInfo extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
                 Intent intent = new Intent(view.getContext(), BookClubDetails.class);
-                intent.putExtra("clubId", clubIds);
+                bundle.putSerializable("recordId", (Serializable)bookClubAdaptor.getItem(i));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

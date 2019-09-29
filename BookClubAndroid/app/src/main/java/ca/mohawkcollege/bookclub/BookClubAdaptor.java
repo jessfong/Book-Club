@@ -44,10 +44,17 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
         bookClubs.add(bookClub);
     }
 
+    /**
+     * Clears adapter of all book club objects
+     */
     @Override
     public void clear() {
         super.clear();
         bookClubs.clear();
+    }
+
+    public BookClub getItem(int index){
+        return this.bookClubs.get(index);
     }
 
     /**
