@@ -74,6 +74,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
                         return;
                     }
 
+                    // TODO: Ensure book clubs appear if user is admin OR if user is in the list of members
                     if (bookClub.userId.equals(firebaseUser.getUid()))
                         bookClubAdaptor.add(bookClub);
                 }

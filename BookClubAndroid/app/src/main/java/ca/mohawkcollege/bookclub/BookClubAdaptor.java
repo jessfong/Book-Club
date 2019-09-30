@@ -80,6 +80,7 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
         TextView infoAdminNameTextView = listItem.findViewById(R.id.bookClubAdminTextView);
         infoAdminNameTextView.setText(bookClub.userId);
 
+        // TODO: Ensure imageView is not set if bookClubImageView is empty
         ImageView infoBookClubImageView = listItem.findViewById(R.id.bookClubImageView);
         Glide.with(context)
                 .load(Uri.parse(bookClub.imageUrl))

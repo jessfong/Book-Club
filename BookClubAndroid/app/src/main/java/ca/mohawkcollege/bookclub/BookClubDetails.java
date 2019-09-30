@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +36,7 @@ public class BookClubDetails extends AppCompatActivity {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
+        final DatabaseReference databaseReference = firebaseDatabase.getReference();
 
         // Get book club record id form last activity
         Intent intent = this.getIntent();
@@ -57,18 +60,32 @@ public class BookClubDetails extends AppCompatActivity {
         deleteClubBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String uid = user.getUid();
+                String userId = bookClub.userId;
+
                 // If current user is club admin allow them to delete
-                if(user.getUid().equals(bookClub.userId)){
-                    Toast.makeText(BookClubDetails.this, "Allowed to delete", Toast.LENGTH_SHORT).show();
+                if(uid.equals(userId)){
+                    databaseReference.child("BookClubs").child(bookClub.recordId)
+                            .removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i("DELETED", "DocumentSnapshot successfully deleted!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i("ERROR DELETING", "Error deleting document", e);
+                                }
+                            });
                 }
-                Toast.makeText(BookClubDetails.this, "Not allowed to delete", Toast.LENGTH_LONG).show();
-                Log.i("userId", "Your id: " + bookClub.userId + ". adminId: " + user.getUid() + ".");
+                Toast.makeText(BookClubDetails.this, "Only the club admin can delete.", Toast.LENGTH_SHORT).show();
             }
         });
 
 
         // Populate members list view (after adding functionality to add members)
-        DatabaseReference databaseReference = firebaseDatabase.getReference("BookClubs/" + bookClub.recordId);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
