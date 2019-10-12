@@ -55,6 +55,7 @@ public class BookClubDetails extends AppCompatActivity {
                 .load(Uri.parse(bookClub.imageUrl))
                 .into(infoBookClubImageView);
 
+
         // If user wants to delete a book club
         Button deleteClubBtn = findViewById(R.id.deleteClubBtn);
         deleteClubBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,17 @@ public class BookClubDetails extends AppCompatActivity {
                             });
                 }
                 Toast.makeText(BookClubDetails.this, "Only the club admin can delete.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        // If user wants to create a book club meeting
+        Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
+        createMeetingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookClubDetails.this, CreateMeeting.class);
+                startActivity(intent);
             }
         });
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/createMeetingTextView"
+            android:layout_width="339dp"
+            android:layout_height="81dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:text="@string/createMeetingTextView"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/locationTextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp"
+            android:layout_below="@id/createMeetingTextView"
+            android:layout_marginTop="35dp" />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dateTextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="55dp"
+            android:layout_below="@id/locationTextView"
+            android:layout_marginTop="49dp" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timeTextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="50dp"
+            android:layout_below="@id/dateTextView"
+            android:layout_marginTop="43dp" />
+
+        <EditText
+            android:id="@+id/locationEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/meetingLocationHint"
+            android:inputType="textPersonName"
+            android:layout_marginStart="110dp"
+            android:layout_below="@id/createMeetingTextView"
+            android:layout_marginTop="25dp" />
+
+        <EditText
+            android:id="@+id/dateEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/meetingDateHint"
+            android:inputType="date"
+            android:layout_marginStart="110dp"
+            android:layout_below="@id/locationEditText"
+            android:layout_marginTop="25dp" />
+
+        <EditText
+            android:id="@+id/timeEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/meetingTimeHint"
+            android:inputType="time"
+            android:layout_marginStart="110dp"
+            android:layout_below="@id/dateEditText"
+            android:layout_marginTop="25dp" />
+
+        <Button
+            android:id="@+id/addMembersBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/meetingAddMembers"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/timeEditText"
+            android:layout_marginTop="35dp" />
+
+    </RelativeLayout>
+</FrameLayout>
