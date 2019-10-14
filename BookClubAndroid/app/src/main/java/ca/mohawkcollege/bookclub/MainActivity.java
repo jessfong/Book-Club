@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,15 +18,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Arrays;
 import java.util.List;
 
+import ca.mohawkcollege.bookclub.objects.User;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private static int RC_SIGN_IN = 1;
-
+    
     /**
      * Signs in user, retrieves list of user's book clubs, and allows users to create a new book club
      * @param savedInstanceState - saved data from last login
@@ -43,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference("User");
+
         // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+        List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.PhoneBuilder().build());
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -74,7 +83,29 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                // If true, is users first time registering
+                // If thats the cast, add them to users table with details
+                if (response.isNewUser()) {
+                    FirebaseInstanceId.getInstance().getInstanceId()
+                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(MainActivity.this, "Failed to get token", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
+                                    // Get new Instance ID token
+                                    String token = task.getResult().getToken();
+                                    User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
+                                    String key = mDatabase.push().getKey();
+
+                                    mDatabase.child(key).setValue(user);
+                                }
+                            });
+                }
 
                 // Load list of user's book clubs
                 Intent intent = new Intent(MainActivity.this, RetrieveClubInfo.class);

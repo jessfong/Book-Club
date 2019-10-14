@@ -30,6 +30,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.UUID;
 
+import ca.mohawkcollege.bookclub.objects.BookClub;
+
 public class CreateBookClub extends AppCompatActivity {
 
     private DatabaseReference mDatabase;

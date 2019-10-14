@@ -1,4 +1,4 @@
-package ca.mohawkcollege.bookclub;
+package ca.mohawkcollege.bookclub.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

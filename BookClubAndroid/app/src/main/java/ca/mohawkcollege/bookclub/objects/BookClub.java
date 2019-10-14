@@ -1,4 +1,4 @@
-package ca.mohawkcollege.bookclub;
+package ca.mohawkcollege.bookclub.objects;
 
 import java.io.Serializable;
 
