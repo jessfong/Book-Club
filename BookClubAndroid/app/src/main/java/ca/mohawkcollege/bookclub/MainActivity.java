@@ -100,11 +100,17 @@ public class MainActivity extends AppCompatActivity {
                                     // Get new Instance ID token
                                     String token = task.getResult().getToken();
                                     User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
-                                    String key = mDatabase.push().getKey();
-
-                                    mDatabase.child(key).setValue(user);
+                                    mDatabase.child(user.userId).setValue(user);
                                 }
                             });
+                }
+
+                if (MainActivity.this.getIntent().hasExtra("accept")) {
+                    boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
+                    String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
+
+                    
+                    Toast.makeText(this, "User invite: " + accept + " " + recordId, Toast.LENGTH_SHORT).show();
                 }
 
                 // Load list of user's book clubs

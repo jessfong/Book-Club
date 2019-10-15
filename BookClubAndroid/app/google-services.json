@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "300368731976-f1aoips7labdksjukds0fr7i88v3d3sk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.mohawkcollege.bookclub",
+            "certificate_hash": "a731d722c473439701a225165e34294f29de75c7"
+          }
+        },
+        {
+          "client_id": "300368731976-adi08cfo0m71ga668h4pae4n6q9lhpvc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.mohawkcollege.bookclub",
+            "certificate_hash": "c2d4f3a01949ece55845636fc9573beadb41b51c"
+          }
+        },
+        {
           "client_id": "300368731976-m1ei0h1v18r6ob7mld27kjmt9od3pv47.apps.googleusercontent.com",
           "client_type": 3
         }
