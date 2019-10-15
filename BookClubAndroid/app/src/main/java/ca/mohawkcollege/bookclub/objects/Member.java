@@ -1,14 +1,12 @@
 package ca.mohawkcollege.bookclub.objects;
 
 public class Member {
-    public String memberId;
     public String userId;
     public String bookClubId;
 
     public Member(){}
 
-    public Member(String memberId, String userId, String bookClubId){
-        this.memberId = memberId;
+    public Member(String userId, String bookClubId){
         this.userId = userId;
         this.bookClubId = bookClubId;
     }

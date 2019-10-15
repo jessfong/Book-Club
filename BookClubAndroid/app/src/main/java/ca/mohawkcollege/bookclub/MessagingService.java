@@ -66,7 +66,7 @@ public class MessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("User");
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), s);
         mDatabase.child(user.userId).setValue(user);

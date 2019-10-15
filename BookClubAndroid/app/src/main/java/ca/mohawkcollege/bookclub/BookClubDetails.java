@@ -61,7 +61,7 @@ public class BookClubDetails extends AppCompatActivity {
         clubNameTextView.setText(bookClub.name);
 
         TextView adminNameTextView = findViewById(R.id.clubAdminTextView);
-        adminNameTextView.setText(bookClub.userId);
+        adminNameTextView.setText(bookClub.clubOwner);
 
         ImageView infoBookClubImageView = findViewById(R.id.clubImageView);
         Glide.with(this)
@@ -75,10 +75,10 @@ public class BookClubDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String uid = user.getUid();
-                String userId = bookClub.userId;
+                String clubOwner = bookClub.clubOwner;
 
                 // If current user is club admin allow them to delete
-                if(uid.equals(userId)){
+                if(uid.equals(clubOwner)){
                     databaseReference.child("BookClubs").child(bookClub.recordId)
                             .removeValue()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -148,7 +148,7 @@ public class BookClubDetails extends AppCompatActivity {
                 int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 String number = "+1" + cursor.getString(numberIndex).replace("(", "").replace(")", "").replace(" ", "").replace("-", "");
 
-                DatabaseReference users = FirebaseDatabase.getInstance().getReference("User");
+                DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
                 Query query = users.orderByChild("phoneNumber").equalTo(number);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

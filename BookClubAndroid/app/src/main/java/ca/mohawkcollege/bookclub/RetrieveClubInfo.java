@@ -17,11 +17,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import ca.mohawkcollege.bookclub.objects.BookClub;
+import ca.mohawkcollege.bookclub.objects.Member;
 
 public class RetrieveClubInfo extends AppCompatActivity {
 
@@ -49,8 +52,9 @@ public class RetrieveClubInfo extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             /**
              * Reads and listens for changes that happen to firebase database.
-             * Retrieves each child from BookClubs table and checks if each book club belongs to current user.
-             * If book club belongs to user that book club is added to an arrayList.
+             * Retrieves each child from BookClubs table and checks if book club belongs to
+             * current user or if they are a member of that club.
+             * If user is the book club owner or if they are a member of the book club the club is added to an arrayList.
              * When there are no more book clubs in the table the listView is populated with an
              * arrayAdapter that customizes the look of each view(Ex. textview, imageview, etc) in each listItem.
              * The listItem is then displayed in the parent view (the listView)
@@ -62,15 +66,35 @@ public class RetrieveClubInfo extends AppCompatActivity {
 
                 for (DataSnapshot child: dataSnapshot.getChildren())
                 {
-                    BookClub bookClub = child.getValue(BookClub.class);
+                    final BookClub bookClub = child.getValue(BookClub.class);
 
                     if (bookClub == null) {
                         Toast.makeText(RetrieveClubInfo.this, "Book club error", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // TODO: Ensure book clubs appear if user is admin OR if user is in the list of members
-                    if (bookClub.userId.equals(firebaseUser.getUid()))
+                    // Checks which book clubs user is a member of
+                    DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+                    Query query = members.orderByChild("bookClubId").equalTo(bookClub.recordId);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                Member member = child.getValue(Member.class);
+
+                                if(member.userId.equals(firebaseUser.getUid())) {
+                                    bookClubAdaptor.add(bookClub);
+                                }
+                            }
+                         }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    if (bookClub.clubOwner.equals(firebaseUser.getUid()))
                         bookClubAdaptor.add(bookClub);
                 }
 

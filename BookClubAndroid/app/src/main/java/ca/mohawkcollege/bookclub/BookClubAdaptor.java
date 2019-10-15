@@ -80,7 +80,7 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
         infoNameTextView.setText(bookClub.name);
 
         TextView infoAdminNameTextView = listItem.findViewById(R.id.bookClubAdminTextView);
-        infoAdminNameTextView.setText(bookClub.userId);
+        infoAdminNameTextView.setText(bookClub.clubOwner);
 
         // TODO: Ensure imageView is not set if bookClubImageView is empty
         ImageView infoBookClubImageView = listItem.findViewById(R.id.bookClubImageView);

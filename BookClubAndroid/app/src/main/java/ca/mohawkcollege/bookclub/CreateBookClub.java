@@ -76,7 +76,10 @@ public class CreateBookClub extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     writeNewClub(user.getUid(), name.getText().toString());
-                    Toast.makeText(context, "Created!", Toast.LENGTH_SHORT).show();
+
+                    Intent acceptIntent = new Intent(view.getContext(), RetrieveClubInfo.class);
+                    acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    view.getContext().startActivity(acceptIntent);
                 }
             });
         }

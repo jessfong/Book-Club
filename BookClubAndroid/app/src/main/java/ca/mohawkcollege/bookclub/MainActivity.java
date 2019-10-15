@@ -24,9 +24,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("User");
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
 
         // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.PhoneBuilder().build());
+        List<AuthUI.IdpConfig> providers = new ArrayList<>();
+        providers.add(new AuthUI.IdpConfig.PhoneBuilder().build());
+        //providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -85,31 +89,36 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                // If true, is users first time registering
-                // If thats the cast, add them to users table with details
-                if (response.isNewUser()) {
-                    FirebaseInstanceId.getInstance().getInstanceId()
-                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(MainActivity.this, "Failed to get token", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    // Get new Instance ID token
-                                    String token = task.getResult().getToken();
-                                    User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
-                                    mDatabase.child(user.userId).setValue(user);
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(MainActivity.this, "Failed to get token", Toast.LENGTH_SHORT).show();
+                                    return;
                                 }
-                            });
-                }
+
+                                // Get new Instance ID token
+                                String token = task.getResult().getToken();
+                                User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
+                                mDatabase.child(user.userId).setValue(user);
+                            }
+                        });
+
 
                 if (MainActivity.this.getIntent().hasExtra("accept")) {
                     boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
                     String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
 
-                    
+                    if(accept) {
+                        DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+                        Member member = new Member(firebaseUser.getUid(), recordId);
+                        String key = members.push().getKey();
+                        members.child(key).setValue(member);
+                        // TODO: Remove notification?
+                    }
+                    // TODO: When user declines an invite, remove the invite from invites table
+
                     Toast.makeText(this, "User invite: " + accept + " " + recordId, Toast.LENGTH_SHORT).show();
                 }
 
