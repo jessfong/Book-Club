@@ -38,7 +38,6 @@ import ca.mohawkcollege.bookclub.objects.User;
 
 public class BookClubDetails extends AppCompatActivity {
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference databaseReference;
     private BookClub bookClub;
 
@@ -48,7 +47,7 @@ public class BookClubDetails extends AppCompatActivity {
         setContentView(R.layout.activity_book_club_details);
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = firebaseDatabase.getReference();
 
         // Get book club record id form last activity
@@ -74,7 +73,7 @@ public class BookClubDetails extends AppCompatActivity {
         deleteClubBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String uid = user.getUid();
+                String uid = firebaseUser.getUid();
                 String clubOwner = bookClub.clubOwner;
 
                 // If current user is club admin allow them to delete
@@ -99,8 +98,15 @@ public class BookClubDetails extends AppCompatActivity {
         });
 
 
-        // If user wants to create a book club meeting
-        Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
+        // If user wants to create a book club meeting, check if user is owner
+        final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
+
+        if(bookClub.clubOwner.equals(firebaseUser.getUid())) {
+            createMeetingBtn.setVisibility(Button.VISIBLE);
+        } else {
+            createMeetingBtn.setVisibility(Button.GONE);
+        }
+
         createMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -94,6 +94,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
                         }
                     });
 
+                    // If user is owner of book club add to list of book clubs to display
                     if (bookClub.clubOwner.equals(firebaseUser.getUid()))
                         bookClubAdaptor.add(bookClub);
                 }
