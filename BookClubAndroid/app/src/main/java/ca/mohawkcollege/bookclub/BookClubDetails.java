@@ -4,19 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
+import ca.mohawkcollege.bookclub.helpers.MemberAdapter;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Invite;
+import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class BookClubDetails extends AppCompatActivity {
@@ -66,6 +66,37 @@ public class BookClubDetails extends AppCompatActivity {
         Glide.with(this)
                 .load(Uri.parse(bookClub.imageUrl))
                 .into(infoBookClubImageView);
+
+        ListView listView = findViewById(R.id.membersListView);
+
+        final MemberAdapter memberAdapter = new MemberAdapter(this, R.layout.member_info);
+        DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+        members.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Member member = child.getValue(Member.class);
+
+                    if(member.bookClubId.equals(bookClub.recordId)) {
+                        memberAdapter.add(member);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        listView.setAdapter(memberAdapter);
+        // Have book club object
+        // Make reference to members table
+            // If child is a member in this club (if child.bookClubId equals bookClub.recordId)
+                // Add child object to adapter
+        // Set adapter to list view after finished looping over data snapshot of members table
+
+
 
 
         // If user wants to delete a book club
@@ -100,7 +131,6 @@ public class BookClubDetails extends AppCompatActivity {
 
         // If user wants to create a book club meeting, check if user is owner
         final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
-
         if(bookClub.clubOwner.equals(firebaseUser.getUid())) {
             createMeetingBtn.setVisibility(Button.VISIBLE);
         } else {
@@ -122,18 +152,6 @@ public class BookClubDetails extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 startActivityForResult(intent, 30);
-            }
-        });
-
-
-        // Populate members list view (after adding functionality to add members)
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }

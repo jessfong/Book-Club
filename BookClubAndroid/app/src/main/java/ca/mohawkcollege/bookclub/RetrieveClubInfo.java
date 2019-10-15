@@ -21,8 +21,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
+import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Member;
 
@@ -51,7 +51,6 @@ public class RetrieveClubInfo extends AppCompatActivity {
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             /**
-             * Reads and listens for changes that happen to firebase database.
              * Retrieves each child from BookClubs table and checks if book club belongs to
              * current user or if they are a member of that club.
              * If user is the book club owner or if they are a member of the book club the club is added to an arrayList.

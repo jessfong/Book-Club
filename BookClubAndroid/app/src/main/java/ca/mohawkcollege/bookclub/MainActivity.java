@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(accept) {
                         DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
-                        Member member = new Member(firebaseUser.getUid(), recordId);
+                        Member member = new Member(firebaseUser.getUid(), recordId, firebaseUser.getPhoneNumber());
                         String key = members.push().getKey();
                         members.child(key).setValue(member);
                         // TODO: Remove notification?

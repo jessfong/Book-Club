@@ -1,4 +1,4 @@
-package ca.mohawkcollege.bookclub;
+package ca.mohawkcollege.bookclub.helpers;
 
 import android.content.Context;
 import android.net.Uri;
@@ -17,6 +17,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 
 
@@ -26,12 +27,12 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
     private List<BookClub> bookClubs;
 
     /**
-     * Constructor to set context and arrayList variables for later use
-     * @param context - context
-     * @param bookClubInfoResourceID - book_club_info layout resource id
+     *      * Constructor to set context and arrayList variables for later use
+     *      * @param context - context
+     *      * @param bookClubInfoResourceId - book_club_info layout resource id
      */
-    BookClubAdaptor(@NonNull Context context, int bookClubInfoResourceID) {
-        super(context, bookClubInfoResourceID);
+    public BookClubAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
+        super(context, bookClubInfoResourceId);
         this.context = context;
         this.bookClubs = new ArrayList<>();
     }
