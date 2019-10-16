@@ -88,9 +88,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
                          }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
                     });
 
                     // If user is owner of book club add to list of book clubs to display

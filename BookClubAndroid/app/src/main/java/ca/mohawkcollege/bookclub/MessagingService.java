@@ -27,7 +27,12 @@ public class MessagingService extends FirebaseMessagingService {
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
         Map<String, String> extraData = remoteMessage.getData();
-        showNotification(title, body, extraData.get("bookClubId"));
+
+        if (extraData.get("notificationType").equals("invite")) {
+            showNotification(title, body, extraData.get("bookClubId"));
+        } else {
+            // TODO: Create notification for meeting invites
+        }
     }
 
     public void showNotification(String title, String message, String bookClubId) {

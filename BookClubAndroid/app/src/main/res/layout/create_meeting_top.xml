@@ -84,10 +84,10 @@
             android:layout_marginTop="25dp" />
 
         <Button
-            android:id="@+id/addMembersBtn"
+            android:id="@+id/setMeetingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/meetingAddMembers"
+            android:text="@string/createMeetingBtn"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/timeEditText"
             android:layout_marginTop="35dp" />

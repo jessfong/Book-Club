@@ -29,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+
 import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
 import ca.mohawkcollege.bookclub.helpers.MemberAdapter;
 import ca.mohawkcollege.bookclub.objects.BookClub;
@@ -68,7 +70,6 @@ public class BookClubDetails extends AppCompatActivity {
                 .into(infoBookClubImageView);
 
         ListView listView = findViewById(R.id.membersListView);
-
         final MemberAdapter memberAdapter = new MemberAdapter(this, R.layout.member_info);
         DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
         members.addValueEventListener(new ValueEventListener() {
@@ -90,14 +91,6 @@ public class BookClubDetails extends AppCompatActivity {
         });
 
         listView.setAdapter(memberAdapter);
-        // Have book club object
-        // Make reference to members table
-            // If child is a member in this club (if child.bookClubId equals bookClub.recordId)
-                // Add child object to adapter
-        // Set adapter to list view after finished looping over data snapshot of members table
-
-
-
 
         // If user wants to delete a book club
         Button deleteClubBtn = findViewById(R.id.deleteClubBtn);
@@ -128,7 +121,6 @@ public class BookClubDetails extends AppCompatActivity {
             }
         });
 
-
         // If user wants to create a book club meeting, check if user is owner
         final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
         if(bookClub.clubOwner.equals(firebaseUser.getUid())) {
@@ -141,11 +133,13 @@ public class BookClubDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BookClubDetails.this, CreateMeeting.class);
+                intent.putExtra("recordId", bookClub.recordId);
                 startActivity(intent);
             }
         });
 
-        Button addMembersBtn = findViewById(R.id.addMembersBtn);
+        // Get phone contacts when user clicks on add members button
+        Button addMembersBtn = findViewById(R.id.inviteToBookClubBtn);
         addMembersBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,13 +184,13 @@ public class BookClubDetails extends AppCompatActivity {
                                 invites.child(key).setValue(invite);
                             }
                         } else {
-                            Toast.makeText(BookClubDetails.this, "FOUND NOTHING", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BookClubDetails.this, "Contact is not a book club user", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(BookClubDetails.this, "FOUND NOTHING", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BookClubDetails.this, "On canceled error", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
