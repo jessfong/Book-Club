@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Get new Instance ID token
                                 String token = task.getResult().getToken();
+                                Toast.makeText(MainActivity.this, "New token 1: " + token, Toast.LENGTH_SHORT).show();
                                 User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
                                 mDatabase.child(user.userId).setValue(user);
                             }

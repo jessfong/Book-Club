@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -31,7 +32,7 @@ public class MessagingService extends FirebaseMessagingService {
         if (extraData.get("notificationType").equals("invite")) {
             showNotification(title, body, extraData.get("bookClubId"));
         } else {
-            // TODO: Create notification for meeting invites
+            showNotification(title, body, extraData.get("bookClubId"));
         }
     }
 
@@ -75,5 +76,6 @@ public class MessagingService extends FirebaseMessagingService {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), s);
         mDatabase.child(user.userId).setValue(user);
+        Toast.makeText(this, "New token 1: " + s, Toast.LENGTH_SHORT).show();
     }
 }
