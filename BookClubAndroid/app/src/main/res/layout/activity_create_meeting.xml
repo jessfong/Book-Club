@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".CreateMeeting">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/meetingLocationHint"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:layout_marginStart="110dp"
             android:enabled="false"
             android:layout_below="@id/createMeetingTextView"
@@ -112,13 +111,21 @@
             android:layout_marginTop="25dp" />
 
         <Button
+            android:id="@+id/getLocationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setLocationBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/endTimeEditText"
+            android:layout_marginTop="50dp" />
+
+        <Button
             android:id="@+id/setMeetingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/createMeetingBtn"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/endTimeEditText"
+            android:layout_below="@id/getLocationBtn"
             android:layout_marginTop="100dp" />
-
     </RelativeLayout>
-</LinearLayout>
+</ScrollView>

@@ -36,7 +36,8 @@ public class MessagingService extends FirebaseMessagingService {
             String date = extraData.get("date");
             String startTime = extraData.get("startTime");
             String endTime = extraData.get("endTime");
-            showMeetingInvite(title, body, meetingUID, date, startTime, endTime);
+            String location = extraData.get("location");
+            showMeetingInvite(title, body, meetingUID, date, startTime, endTime, location);
         }
     }
 
@@ -50,16 +51,16 @@ public class MessagingService extends FirebaseMessagingService {
         acceptIntent.putExtra("recordId", bookClubId);
         acceptIntent.putExtra("notiId", id);
         PendingIntent acceptPendingIntent =
-                PendingIntent.getActivity(this, 0, acceptIntent, 0);
+                PendingIntent.getActivity(this, 1, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent declineIntent = new Intent(this, MainActivity.class);
-        acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        acceptIntent.putExtra("type", "bookclub");
-        acceptIntent.putExtra("accept", false);
-        acceptIntent.putExtra("recordId", bookClubId);
-        acceptIntent.putExtra("notiId", id);
+        declineIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        declineIntent.putExtra("type", "bookclub");
+        declineIntent.putExtra("accept", false);
+        declineIntent.putExtra("recordId", bookClubId);
+        declineIntent.putExtra("notiId", id);
         PendingIntent declinePendingIntent =
-                PendingIntent.getActivity(this, 0, declineIntent, 0);
+                PendingIntent.getActivity(this, 2, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "BookClub")
                 .setContentTitle(title)
@@ -78,7 +79,7 @@ public class MessagingService extends FirebaseMessagingService {
         manager.notify(id, builder.build());
     }
 
-    public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime) {
+    public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime, String location) {
         int id = 567;
 
         Intent acceptIntent = new Intent(this, MainActivity.class);
@@ -90,20 +91,22 @@ public class MessagingService extends FirebaseMessagingService {
         acceptIntent.putExtra("startTime", startTime);
         acceptIntent.putExtra("endTime", endTime);
         acceptIntent.putExtra("notiId", id);
+        acceptIntent.putExtra("location", location);
         PendingIntent acceptPendingIntent =
-                PendingIntent.getActivity(this, 0, acceptIntent, 0);
+                PendingIntent.getActivity(this, 2, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent declineIntent = new Intent(this, MainActivity.class);
-        acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        acceptIntent.putExtra("type", "meeting");
-        acceptIntent.putExtra("accept", false);
-        acceptIntent.putExtra("recordId", meetingUID);
-        acceptIntent.putExtra("date", date);
-        acceptIntent.putExtra("startTime", startTime);
-        acceptIntent.putExtra("endTime", endTime);
-        acceptIntent.putExtra("notiId", id);
+        declineIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        declineIntent.putExtra("type", "meeting");
+        declineIntent.putExtra("accept", false);
+        declineIntent.putExtra("recordId", meetingUID);
+        declineIntent.putExtra("date", date);
+        declineIntent.putExtra("startTime", startTime);
+        declineIntent.putExtra("endTime", endTime);
+        declineIntent.putExtra("notiId", id);
+        declineIntent.putExtra("location", location);
         PendingIntent declinePendingIntent =
-                PendingIntent.getActivity(this, 0, declineIntent, 0);
+                PendingIntent.getActivity(this, 4, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "BookClub")
                 .setContentTitle(title)

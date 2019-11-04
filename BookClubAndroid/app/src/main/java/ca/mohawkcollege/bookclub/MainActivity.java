@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_club_info);
+        Intent intent = getParentActivityIntent();
+        Intent intent1 = getIntent();
         main = this;
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -129,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
                         String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
                         String date = MainActivity.this.getIntent().getStringExtra("date");
                         String time = MainActivity.this.getIntent().getStringExtra("time");
+                        String location = MainActivity.this.getIntent().getStringExtra("location");
+
+                        Toast.makeText(main, location, Toast.LENGTH_SHORT).show();
                     }
 
                     int notiId = MainActivity.this.getIntent().getIntExtra("notiId", 0);

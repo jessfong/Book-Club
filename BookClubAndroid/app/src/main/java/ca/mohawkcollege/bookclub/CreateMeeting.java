@@ -50,8 +50,8 @@ public class CreateMeeting extends AppCompatActivity {
         Intent intent = getIntent();
         final String bookClubId = intent.getStringExtra("recordId");
 
-        final EditText location = findViewById(R.id.locationEditText);
-        location.setOnClickListener(new View.OnClickListener() {
+        Button locationBtn = findViewById(R.id.getLocationBtn);
+        locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent locationPickerIntent = new LocationPickerActivity.Builder()
@@ -200,6 +200,8 @@ public class CreateMeeting extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (requestCode == 5) {
                 String address = data.getStringExtra(LOCATION_ADDRESS);
+                EditText locationText = findViewById(R.id.locationEditText);
+                locationText.setText(address);
                 Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
             }
         }
