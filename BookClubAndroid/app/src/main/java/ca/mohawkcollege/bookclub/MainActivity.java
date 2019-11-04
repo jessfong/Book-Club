@@ -2,11 +2,19 @@ package ca.mohawkcollege.bookclub;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +36,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
@@ -38,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private static int RC_SIGN_IN = 1;
-    public static Context main;
-    
+
     /**
      * Signs in user, retrieves list of user's book clubs, and allows users to create a new book club
      * @param savedInstanceState - saved data from last login
@@ -48,9 +57,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_club_info);
-        Intent intent = getParentActivityIntent();
-        Intent intent1 = getIntent();
-        main = this;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        1);
+            }
+        }
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -106,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Get new Instance ID token
                                 String token = task.getResult().getToken();
-                                Toast.makeText(MainActivity.this, "New token 1: " + token, Toast.LENGTH_SHORT).show();
                                 User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
                                 mDatabase.child(user.userId).setValue(user);
                             }
@@ -130,10 +143,48 @@ public class MainActivity extends AppCompatActivity {
                         boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
                         String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
                         String date = MainActivity.this.getIntent().getStringExtra("date");
-                        String time = MainActivity.this.getIntent().getStringExtra("time");
+                        String startTime = MainActivity.this.getIntent().getStringExtra("startTime");
+                        String endTime = MainActivity.this.getIntent().getStringExtra("endTime");
                         String location = MainActivity.this.getIntent().getStringExtra("location");
 
-                        Toast.makeText(main, location, Toast.LENGTH_SHORT).show();
+                        if (accept) {
+                            // Split day and time of meeting
+                            String[] dateSplit = date.split("/");
+                            int day = Integer.parseInt(dateSplit[0]);
+                            int month = Integer.parseInt(dateSplit[1]) - 1;
+                            int year = Integer.parseInt(dateSplit[2]);
+
+                            String[] startTimeSplit = startTime.split(":");
+                            int startHour = Integer.parseInt(startTimeSplit[0]);
+                            int startMinute = Integer.parseInt(startTimeSplit[1]);
+
+                            String[] endTimeSplit = endTime.split(":");
+                            int endHour = Integer.parseInt(endTimeSplit[0]);
+                            int endMinute = Integer.parseInt(endTimeSplit[1]);
+
+                            Calendar beginTime = Calendar.getInstance();
+                            beginTime.set(year, month, day, startHour, startMinute);
+                            Calendar endTimeCalendar = Calendar.getInstance();
+                            endTimeCalendar.set(year, month, day, endHour, endMinute);
+                            ContentResolver cr = getContentResolver();
+                            ContentValues values = new ContentValues();
+                            values.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
+                            values.put(CalendarContract.Events.DTEND, endTimeCalendar.getTimeInMillis());
+                            values.put(CalendarContract.Events.TITLE, "BookClub");
+                            values.put(CalendarContract.Events.DESCRIPTION, "BookClub Meeting");
+                            values.put(CalendarContract.Events.EVENT_LOCATION, location);
+                            values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+                            values.put(CalendarContract.Events.CALENDAR_ID, 1);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                                    Toast.makeText(this, "No permission to write to calendar!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            }
+                            
+                            cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                            Toast.makeText(this, "Added meeting to calendar!", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     int notiId = MainActivity.this.getIntent().getIntExtra("notiId", 0);

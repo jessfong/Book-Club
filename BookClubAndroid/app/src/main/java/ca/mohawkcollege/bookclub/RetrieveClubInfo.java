@@ -97,7 +97,6 @@ public class RetrieveClubInfo extends AppCompatActivity {
                 }
 
                 listView.setAdapter(bookClubAdaptor);
-                Toast.makeText(RetrieveClubInfo.this, "Download completed.", Toast.LENGTH_SHORT).show();
             }
 
             /**

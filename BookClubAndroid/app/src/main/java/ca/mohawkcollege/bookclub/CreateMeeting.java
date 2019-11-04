@@ -106,12 +106,12 @@ public class CreateMeeting extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
-                    DateFormat timeFormat = new SimpleDateFormat("hh:mm");
+                    DateFormat timeFormat = new SimpleDateFormat("HH:mm");
                     timeFormat.setLenient(false);
                     timeFormat.parse(startTimeEditText.getText().toString());
                     startTimeText = startTimeEditText.getText().toString();
                 } catch (ParseException e) {
-                    startTimeEditText.setError("Time must be in hh:mm format!");
+                    startTimeEditText.setError("Time must be in HH:mm format, using 24 hour time!");
                     startTimeText = null;
                 }
             }
@@ -132,12 +132,12 @@ public class CreateMeeting extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
-                    DateFormat timeFormat = new SimpleDateFormat("hh:mm");
+                    DateFormat timeFormat = new SimpleDateFormat("HH:mm");
                     timeFormat.setLenient(false);
                     timeFormat.parse(endTimeEditText.getText().toString());
                     endTimeText = endTimeEditText.getText().toString();
                 } catch (ParseException e) {
-                    endTimeEditText.setError("Time must be in hh:mm format!");
+                    endTimeEditText.setError("Time must be in HH:mm format, using 24 hour time!");
                     endTimeText = null;
                 }
             }
