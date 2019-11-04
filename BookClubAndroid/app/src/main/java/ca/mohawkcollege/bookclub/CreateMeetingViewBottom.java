@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 
 public class CreateMeetingViewBottom extends Fragment {
 
+    private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
+
     public CreateMeetingViewBottom() {
         // Required empty public constructor
     }
@@ -16,6 +18,7 @@ public class CreateMeetingViewBottom extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.create_meeting_bottom, container, false);
+
 
         return view;
     }

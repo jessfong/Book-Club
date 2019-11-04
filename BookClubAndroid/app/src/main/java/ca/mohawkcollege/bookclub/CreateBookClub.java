@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -75,6 +76,16 @@ public class CreateBookClub extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (name.getText() == null || TextUtils.isEmpty(name.getText())) {
+                        Toast.makeText(getApplicationContext(), "Book club name cannot be empty.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (imageFile == null) {
+                        Toast.makeText(getApplicationContext(), "You must select an image!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     writeNewClub(user.getUid(), name.getText().toString());
 
                     Intent acceptIntent = new Intent(view.getContext(), RetrieveClubInfo.class);

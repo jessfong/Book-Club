@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     tools:context=".BookClubDetails">
-
-    <ImageView
-        android:id="@+id/clubImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="120dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="550dp"/>
-
-    <TextView
-        android:id="@+id/clubNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="620dp"
-        android:text="TextView"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/clubAdminTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="235dp"
-        android:text="TextView"
-        android:textSize="18sp" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/inviteToBookClubBtn"
+        <ImageView
+            android:id="@+id/clubImageView"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="120dp"
+            android:layout_marginEnd="120dp"
+            android:layout_marginBottom="550dp"/>
+
+        <TextView
+            android:id="@+id/clubNameTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="270dp"
-            android:layout_weight="1"
-            android:text="@string/addMembersBtn" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="620dp"
+            android:text="TextView"
+            android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/createMeetingBtn"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/clubAdminTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="270dp"
-            android:layout_weight="1"
-            android:text="@string/createMeetingBtn" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="235dp"
+            android:text="TextView"
+            android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/deleteClubBtn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="278dp"
-            android:layout_weight="1"
-            android:text="@string/deleteClubBtn" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/inviteToBookClubBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="270dp"
+                android:layout_weight="1"
+                android:text="@string/addMembersBtn" />
 
-    <ListView
-        android:id="@+id/membersListView"
-        android:layout_width="match_parent"
-        android:layout_height="309dp"
-        android:layout_marginTop="420dp" />
+            <Button
+                android:id="@+id/createMeetingBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="270dp"
+                android:layout_weight="1"
+                android:text="@string/createMeetingBtn" />
 
-</RelativeLayout>
+            <Button
+                android:id="@+id/deleteClubBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="278dp"
+                android:layout_weight="1"
+                android:text="@string/deleteClubBtn" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/membersListView"
+            android:layout_width="match_parent"
+            android:layout_height="309dp"
+            android:layout_marginTop="420dp" />
+
+    </RelativeLayout>
+</ScrollView>

@@ -3,6 +3,8 @@ package ca.mohawkcollege.bookclub;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private static int RC_SIGN_IN = 1;
+    public static Context main;
     
     /**
      * Signs in user, retrieves list of user's book clubs, and allows users to create a new book club
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_club_info);
+        main = this;
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -107,20 +111,29 @@ public class MainActivity extends AppCompatActivity {
                         });
 
 
-                if (MainActivity.this.getIntent().hasExtra("accept")) {
-                    boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
-                    String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
+                if (MainActivity.this.getIntent().hasExtra("type")) {
+                    String notificationType = MainActivity.this.getIntent().getStringExtra("type");
 
-                    if(accept) {
-                        DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
-                        Member member = new Member(firebaseUser.getUid(), recordId, firebaseUser.getPhoneNumber());
-                        String key = members.push().getKey();
-                        members.child(key).setValue(member);
-                        // TODO: Remove notification?
+                    if (notificationType.equals("bookclub")) {
+                        boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
+                        String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
+
+                        if (accept) {
+                            DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+                            Member member = new Member(firebaseUser.getUid(), recordId, firebaseUser.getPhoneNumber());
+                            String key = members.push().getKey();
+                            members.child(key).setValue(member);
+                        }
+                    } else {
+                        boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
+                        String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
+                        String date = MainActivity.this.getIntent().getStringExtra("date");
+                        String time = MainActivity.this.getIntent().getStringExtra("time");
                     }
-                    // TODO: When user declines an invite, remove the invite from invites table
 
-                    Toast.makeText(this, "User invite: " + accept + " " + recordId, Toast.LENGTH_SHORT).show();
+                    int notiId = MainActivity.this.getIntent().getIntExtra("notiId", 0);
+                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    manager.cancel(notiId);
                 }
 
                 // Load list of user's book clubs

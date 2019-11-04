@@ -40,15 +40,26 @@
             android:layout_marginTop="49dp" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/startTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/timeTextView"
+            android:text="@string/startTimeTextView"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="5dp"
             android:layout_below="@id/dateTextView"
             android:layout_marginTop="43dp" />
+
+        <TextView
+            android:id="@+id/endTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/endTimeTextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="18dp"
+            android:layout_below="@id/startTimeTextView"
+            android:layout_marginTop="40dp" />
 
         <EditText
             android:id="@+id/locationEditText"
@@ -58,6 +69,7 @@
             android:hint="@string/meetingLocationHint"
             android:inputType="textPersonName"
             android:layout_marginStart="110dp"
+            android:enabled="false"
             android:layout_below="@id/createMeetingTextView"
             android:layout_marginTop="25dp" />
 
@@ -73,7 +85,7 @@
             android:layout_marginTop="25dp" />
 
         <EditText
-            android:id="@+id/timeEditText"
+            android:id="@+id/startTimeEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -83,14 +95,25 @@
             android:layout_below="@id/dateEditText"
             android:layout_marginTop="25dp" />
 
+        <EditText
+            android:id="@+id/endTimeEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/meetingTimeHint"
+            android:inputType="time"
+            android:layout_marginStart="110dp"
+            android:layout_below="@id/startTimeEditText"
+            android:layout_marginTop="25dp" />
+
         <Button
             android:id="@+id/setMeetingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/createMeetingBtn"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/timeEditText"
-            android:layout_marginTop="35dp" />
+            android:layout_below="@id/endTimeEditText"
+            android:layout_marginTop="100dp" />
 
     </RelativeLayout>
 </FrameLayout>
