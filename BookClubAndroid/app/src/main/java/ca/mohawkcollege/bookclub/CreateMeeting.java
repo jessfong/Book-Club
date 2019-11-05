@@ -215,7 +215,6 @@ public class CreateMeeting extends AppCompatActivity {
 
                 latitude = data.getDoubleExtra(LATITUDE, 0.0);
                 longitude = data.getDoubleExtra(LONGITUDE, 0.0);
-                Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
             }
 
             if (requestCode == 102) {

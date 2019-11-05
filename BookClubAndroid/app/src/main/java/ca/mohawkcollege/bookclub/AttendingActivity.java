@@ -179,7 +179,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (meeting != null) {
-            LatLng location = new LatLng(meeting.latitude, meeting.latitude);
+            LatLng location = new LatLng(meeting.latitude, meeting.longitude);
             googleMap.addMarker(new MarkerOptions().position(location)
                     .title("BookClub Location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));

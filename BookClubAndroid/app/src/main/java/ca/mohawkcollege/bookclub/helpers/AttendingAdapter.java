@@ -80,7 +80,7 @@ public class AttendingAdapter extends ArrayAdapter<AttendingView> {
                     .load(Uri.parse(attendingView.imageUrl))
                     .into(attendingImage);
         } else {
-            // TODO: Default image
+            attendingImage.setImageDrawable(getContext().getDrawable(R.mipmap.ic_no_image));
         }
 
         return listItem;
