@@ -16,11 +16,20 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/meetingDate"
+        android:id="@+id/meetingLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/meetingTextView"
+        android:text="Location"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/meetingDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/meetingLocation"
         android:text="Meeting Date and time"
         android:textSize="20sp" />
 

@@ -21,10 +21,13 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class MessagingService extends FirebaseMessagingService {
+    private final static AtomicInteger atomicInteger = new AtomicInteger(0);
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -48,7 +51,7 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     public void showBookClubInvite(String title, String message, String bookClubId) {
-        int id = 566;
+        int id = atomicInteger.incrementAndGet();
 
         Intent acceptIntent = new Intent(this, MainActivity.class);
         acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -87,7 +90,7 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime, String location, String bookTitle, String bookAuthor) {
-        int id = 567;
+        int id = atomicInteger.incrementAndGet();
 
         Intent acceptIntent = new Intent(this, MainActivity.class);
         acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

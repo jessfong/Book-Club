@@ -111,6 +111,9 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         TextView owner = findViewById(R.id.meetingTextView);
         owner.setText(getIntent().getStringExtra("owner"));
 
+        TextView location = findViewById(R.id.meetingLocation);
+        location.setText(meeting.location);
+
         TextView date = findViewById(R.id.meetingDate);
         date.setText(String.format("%s @ %s - %s", meeting.date, meeting.startTime, meeting.endTime));
 

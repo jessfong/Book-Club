@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,10 +39,11 @@ import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
-public class BookClubDetails extends AppCompatActivity {
+public class BookClubDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private DatabaseReference databaseReference;
     private BookClub bookClub;
+    private MemberAdapter memberAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,8 @@ public class BookClubDetails extends AppCompatActivity {
                 .into(infoBookClubImageView);
 
         ListView listView = findViewById(R.id.membersListView);
-        final MemberAdapter memberAdapter = new MemberAdapter(this, R.layout.member_info);
+        listView.setOnItemClickListener(this);
+        memberAdapter = new MemberAdapter(this, R.layout.member_info);
         DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
         members.addValueEventListener(new ValueEventListener() {
             @Override
@@ -279,5 +282,16 @@ public class BookClubDetails extends AppCompatActivity {
 
             cursor.close();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        User user = memberAdapter.getItem(i);
+
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(view.getContext(), PastMeetingsActivity.class);
+        bundle.putSerializable("user", user);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

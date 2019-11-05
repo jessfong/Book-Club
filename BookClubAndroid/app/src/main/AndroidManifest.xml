@@ -28,7 +28,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BookList"></activity>
+        <activity android:name=".PastMeetingsActivity"></activity>
+        <activity android:name=".BookList" />
         <activity android:name=".BookSearch" />
         <activity android:name=".UserProfile" />
         <activity android:name=".AttendingActivity" />
@@ -37,7 +38,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB-4S7datIzBLXeAs2LooGKru3VPRyvMXE" />
