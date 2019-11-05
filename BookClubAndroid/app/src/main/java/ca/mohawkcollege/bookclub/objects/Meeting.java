@@ -1,6 +1,7 @@
 package ca.mohawkcollege.bookclub.objects;
 
 public class Meeting {
+    public String meetingId;
     public String bookClubId;
     public String location;
     public String date;
@@ -9,7 +10,8 @@ public class Meeting {
 
     public Meeting(){}
 
-    public Meeting(String bookClubId, String location, String date, String startTime, String endTime) {
+    public Meeting(String meetingId, String bookClubId, String location, String date, String startTime, String endTime) {
+        this.meetingId = meetingId;
         this.bookClubId = bookClubId;
         this.location = location;
         this.date = date;

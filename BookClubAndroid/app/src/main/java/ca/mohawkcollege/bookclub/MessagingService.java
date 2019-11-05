@@ -131,9 +131,8 @@ public class MessagingService extends FirebaseMessagingService {
         try {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-            User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), s);
+            User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), s, "");
             mDatabase.child(user.userId).setValue(user);
-            Toast.makeText(this, "New token 1: " + s, Toast.LENGTH_SHORT).show();
         } catch (NullPointerException e) {
 
         }

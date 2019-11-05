@@ -148,6 +148,17 @@ public class BookClubDetails extends AppCompatActivity {
                 startActivityForResult(intent, 30);
             }
         });
+
+        // If user wants to view meetings
+        Button viewMeetingsBtn = findViewById(R.id.viewMeetingsBtn);
+        viewMeetingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookClubDetails.this, ViewMeetings.class);
+                intent.putExtra("recordId", bookClub);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

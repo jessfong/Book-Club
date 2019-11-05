@@ -10,6 +10,7 @@
     <string name="createMeetingBtn">Create Meeting</string>
     <string name="setLocationBtn">Set Location</string>
     <string name="deleteClubBtn">Delete Club</string>
+    <string name="viewMeetingsBtn">View Meetings</string>
     <string name="createMeetingTextView">Time for your next club meeting? Just fill in the information below and send an invite to everyone in your book club!</string>
     <string name="meetingLocationHint">Meeting Location</string>
     <string name="meetingDateHint">01/12/2020</string>
@@ -18,4 +19,6 @@
     <string name="startTimeTextView">Start Time:</string>
     <string name="endTimeTextView">End Time:</string>
     <string name="meetingTimeHint">11:30</string>
+    <string name="viewMeetingTextView">Here are all your club Meetings!</string>
+    <string name="attendingTextView">Attending Members</string>
 </resources>

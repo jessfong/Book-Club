@@ -40,6 +40,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import ca.mohawkcollege.bookclub.objects.Attending;
+import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
@@ -63,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_CALENDAR},
                         1);
+            }
+
+            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        2);
             }
         }
 
@@ -120,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Get new Instance ID token
                                 String token = task.getResult().getToken();
-                                User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
+                                User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token, "");
                                 mDatabase.child(user.userId).setValue(user);
                             }
                         });
@@ -148,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
                         String location = MainActivity.this.getIntent().getStringExtra("location");
 
                         if (accept) {
+                            DatabaseReference attending = FirebaseDatabase.getInstance().getReference("Attending");
+                            String key = attending.push().getKey();
+                            Attending attendingUser = new Attending(recordId, firebaseUser.getUid());
+                            attending.child(key).setValue(attendingUser);
+
                             // Split day and time of meeting
                             String[] dateSplit = date.split("/");
                             int day = Integer.parseInt(dateSplit[0]);
@@ -181,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
-                            
+
                             cr.insert(CalendarContract.Events.CONTENT_URI, values);
                             Toast.makeText(this, "Added meeting to calendar!", Toast.LENGTH_SHORT).show();
                         }

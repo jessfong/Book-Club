@@ -172,19 +172,10 @@ public class CreateMeeting extends AppCompatActivity {
 
                 // Create new firebase meeting object
                 DatabaseReference meetings = FirebaseDatabase.getInstance().getReference("Meetings");
-                Meeting meeting = new Meeting(bookClubId, locationText, dateText, startTimeText, endTimeText);
                 String key = meetings.push().getKey();
+                Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText);
                 meetings.child(key).setValue(meeting);
                 Toast.makeText(getApplicationContext(), "Successfully created new meeting!", Toast.LENGTH_SHORT).show();
-
-                // Send notification to everyone in group
-
-                /*getListOfAttendees(bookClubId, new onComplete() {
-                    @Override
-                    public void onComplete(StringBuilder listOfMembers) {
-                        listOfMembers
-                    }
-                });*/
             }
         });
     }
