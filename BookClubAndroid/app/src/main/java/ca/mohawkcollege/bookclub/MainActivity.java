@@ -180,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
                         String startTime = MainActivity.this.getIntent().getStringExtra("startTime");
                         String endTime = MainActivity.this.getIntent().getStringExtra("endTime");
                         String location = MainActivity.this.getIntent().getStringExtra("location");
+                        String bookTitle = MainActivity.this.getIntent().getStringExtra("bookTitle");
+                        String bookAuthor = MainActivity.this.getIntent().getStringExtra("bookAuthor");
 
                         if (accept) {
                             DatabaseReference attending = FirebaseDatabase.getInstance().getReference("Attending");
@@ -209,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
                             ContentValues values = new ContentValues();
                             values.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
                             values.put(CalendarContract.Events.DTEND, endTimeCalendar.getTimeInMillis());
-                            values.put(CalendarContract.Events.TITLE, "BookClub");
-                            values.put(CalendarContract.Events.DESCRIPTION, "BookClub Meeting");
+                            values.put(CalendarContract.Events.TITLE, "BookClub Meeting");
+                            values.put(CalendarContract.Events.DESCRIPTION, bookTitle + " by " + bookAuthor);
                             values.put(CalendarContract.Events.EVENT_LOCATION, location);
                             values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
                             values.put(CalendarContract.Events.CALENDAR_ID, 1);

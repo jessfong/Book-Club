@@ -41,7 +41,9 @@ public class MessagingService extends FirebaseMessagingService {
             String startTime = extraData.get("startTime");
             String endTime = extraData.get("endTime");
             String location = extraData.get("location");
-            showMeetingInvite(title, body, meetingUID, date, startTime, endTime, location);
+            String bookTitle = extraData.get("bookTitle");
+            String bookAuthor = extraData.get("bookAuthor");
+            showMeetingInvite(title, body, meetingUID, date, startTime, endTime, location, bookTitle, bookAuthor);
         }
     }
 
@@ -83,7 +85,7 @@ public class MessagingService extends FirebaseMessagingService {
         manager.notify(id, builder.build());
     }
 
-    public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime, String location) {
+    public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime, String location, String bookTitle, String bookAuthor) {
         int id = 567;
 
         Intent acceptIntent = new Intent(this, MainActivity.class);
@@ -96,6 +98,8 @@ public class MessagingService extends FirebaseMessagingService {
         acceptIntent.putExtra("endTime", endTime);
         acceptIntent.putExtra("notiId", id);
         acceptIntent.putExtra("location", location);
+        acceptIntent.putExtra("bookTitle", bookTitle);
+        acceptIntent.putExtra("bookAuthor", bookAuthor);
         PendingIntent acceptPendingIntent =
                 PendingIntent.getActivity(this, 2, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -109,6 +113,8 @@ public class MessagingService extends FirebaseMessagingService {
         declineIntent.putExtra("endTime", endTime);
         declineIntent.putExtra("notiId", id);
         declineIntent.putExtra("location", location);
+        declineIntent.putExtra("bookTitle", bookTitle);
+        declineIntent.putExtra("bookAuthor", bookAuthor);
         PendingIntent declinePendingIntent =
                 PendingIntent.getActivity(this, 4, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -98,7 +98,9 @@ exports.meetingsListener = functions.database
         startTime: meetingData.startTime,
         endTime: meetingData.endTime,
         location: meetingData.location,
-        meetingUID: context.params.meetingUID
+        meetingUID: context.params.meetingUID,
+        bookTitle: meetingData.bookTitle,
+        bookAuthor: meetingData.bookAuthor
       }
     };
 
