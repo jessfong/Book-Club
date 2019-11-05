@@ -19,6 +19,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -119,13 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                             @Override
-                            public void onComplete(@NonNull final Task<InstanceIdResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this, "Failed to get token", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                            public void onSuccess(InstanceIdResult instanceIdResult) {
+                                final String token = instanceIdResult.getToken();
 
                                 // Get new Instance ID token
                                 DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
@@ -133,12 +131,16 @@ public class MainActivity extends AppCompatActivity {
                                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (!dataSnapshot.exists()) {
+                                            User createNewUser = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token);
+                                            mDatabase.child(firebaseUser.getUid()).setValue(createNewUser);
+                                            return;
+                                        }
                                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                                             User user = child.getValue(User.class);
                                             if (user == null)
                                                 continue;
 
-                                            String token = task.getResult().getToken();
                                             user.token = token;
                                             user.phoneNumber = firebaseUser.getPhoneNumber();
                                             user.email = firebaseUser.getEmail();
@@ -148,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Toast.makeText(MainActivity.this, "Error DB", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
                         });
-
 
                 if (MainActivity.this.getIntent().hasExtra("type")) {
                     String notificationType = MainActivity.this.getIntent().getStringExtra("type");
