@@ -128,7 +128,7 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
                         .into(thumbnail);
             }
         } else {
-            // TODO: No imaage placeholder?
+            thumbnail.setImageDrawable(getContext().getDrawable(R.mipmap.ic_no_image));
         }
 
         return listItem;

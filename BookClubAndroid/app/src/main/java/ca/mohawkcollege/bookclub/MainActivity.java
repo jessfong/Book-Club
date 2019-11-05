@@ -64,24 +64,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_club_info);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_CALENDAR},
-                        1);
-            }
+        if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_CALENDAR},
+                    1);
+        }
 
-            if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CALENDAR},
-                        2);
-            }
+        if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CALENDAR},
+                    2);
+        }
 
-            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        3);
-            }
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CONTACTS},
+                    3);
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -216,16 +214,14 @@ public class MainActivity extends AppCompatActivity {
                             values.put(CalendarContract.Events.EVENT_LOCATION, location);
                             values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
                             values.put(CalendarContract.Events.CALENDAR_ID, 1);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                                    Toast.makeText(this, "No permission to write to calendar!", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                            if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                                Toast.makeText(this, "No permission to write to calendar!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-                                if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                                    Toast.makeText(this, "No permission to read calendar!", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                            if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                                Toast.makeText(this, "No permission to read calendar!", Toast.LENGTH_SHORT).show();
+                                return;
                             }
 
                             Uri event = cr.insert(CalendarContract.Events.CONTENT_URI, values);

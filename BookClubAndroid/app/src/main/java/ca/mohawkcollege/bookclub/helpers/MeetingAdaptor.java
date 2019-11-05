@@ -89,6 +89,15 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
         TextView infoAdminNameTextView = listItem.findViewById(R.id.bookClubAdminTextView);
         infoAdminNameTextView.setText(meeting.date);
 
+        ImageView imageView = listItem.findViewById(R.id.bookMeetingImage);
+        if (meeting.bookThumb != null) {
+            Glide.with(context)
+                    .load(Uri.parse(meeting.bookThumb))
+                    .into(imageView);
+        } else {
+            imageView.setImageDrawable(getContext().getDrawable(R.mipmap.ic_no_image));
+        }
+
         return listItem;
     }
 }

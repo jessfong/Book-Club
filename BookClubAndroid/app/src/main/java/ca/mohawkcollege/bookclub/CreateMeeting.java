@@ -40,6 +40,9 @@ public class CreateMeeting extends AppCompatActivity {
     private String dateText;
     private String startTimeText;
     private String endTimeText;
+    public String bookTitle;
+    public String authors;
+    public String thumb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +152,7 @@ public class CreateMeeting extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CreateMeeting.this, BookSearch.class);
-                startActivity(intent);
+                startActivityForResult(intent, 102);
             }
         });
 
@@ -179,11 +182,16 @@ public class CreateMeeting extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Time cannot be empty.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                
+                if (bookTitle == null) {
+                    Toast.makeText(getApplicationContext(), "A book must be selected.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // Create new firebase meeting object
                 DatabaseReference meetings = FirebaseDatabase.getInstance().getReference("Meetings");
                 String key = meetings.push().getKey();
-                Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText);
+                Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText, bookTitle, authors, thumb);
                 meetings.child(key).setValue(meeting);
                 Toast.makeText(getApplicationContext(), "Successfully created new meeting!", Toast.LENGTH_SHORT).show();
             }
@@ -204,6 +212,12 @@ public class CreateMeeting extends AppCompatActivity {
                 EditText locationText = findViewById(R.id.locationEditText);
                 locationText.setText(address);
                 Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
+            }
+
+            if (requestCode == 102) {
+                bookTitle = data.getStringExtra("title");
+                authors = data.getStringExtra("authors");
+                thumb = data.getStringExtra("thumb");
             }
         }
     }
@@ -232,4 +246,5 @@ public class CreateMeeting extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
 }

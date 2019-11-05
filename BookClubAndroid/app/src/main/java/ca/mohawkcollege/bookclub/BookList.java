@@ -2,6 +2,7 @@ package ca.mohawkcollege.bookclub;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -110,8 +111,16 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
         intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("title", items.volumeInfo.title);
         intent.putExtra("authors", items.getAuthors());
-        intent.putExtra("smallThumb", items.volumeInfo.imageLinks.smallThumbnail);
-        intent.putExtra("thumb", items.volumeInfo.imageLinks.thumbnail);
-        startActivity(intent);
+
+        if (items.volumeInfo.imageLinks != null) {
+            if (items.volumeInfo.imageLinks.smallThumbnail != null) {
+                intent.putExtra("thumb", items.volumeInfo.imageLinks.smallThumbnail);
+            } else if (items.volumeInfo.imageLinks.thumbnail != null) {
+                intent.putExtra("thumb", items.volumeInfo.imageLinks.thumbnail);
+            }
+        }
+
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/bookMeetingImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"/>
+
     <TextView
         android:id="@+id/bookClubNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="75dp"
         android:layout_marginTop="15dp"
         android:text="TextView"
         android:textSize="18sp" />
@@ -19,7 +26,7 @@
         android:id="@+id/bookClubAdminTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="75dp"
         android:layout_below="@id/bookClubNameTextView"
         android:text="TextView"
         android:textSize="15sp" />

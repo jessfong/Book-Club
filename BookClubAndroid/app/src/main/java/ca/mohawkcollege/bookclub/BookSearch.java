@@ -1,7 +1,9 @@
 package ca.mohawkcollege.bookclub;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -51,7 +53,7 @@ public class BookSearch extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), BookList.class);
                 intent.putExtra("search", url);
-                startActivity(intent);
+                startActivityForResult(intent, 103);
             }
         });
     }
@@ -65,5 +67,15 @@ public class BookSearch extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 103) {
+            setResult(Activity.RESULT_OK, data);
+            finish();
+        }
     }
 }
