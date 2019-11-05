@@ -12,10 +12,9 @@
         <ImageView
             android:id="@+id/clubImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="180sp"
             android:layout_marginStart="120dp"
-            android:layout_marginEnd="120dp"
-            android:layout_marginBottom="550dp"/>
+            android:layout_marginEnd="120dp" />
 
         <TextView
             android:id="@+id/clubNameTextView"
@@ -38,37 +37,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_below="@id/clubAdminTextView"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/inviteToBookClubBtn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="270dp"
                 android:layout_weight="1"
                 android:text="@string/addMembersBtn" />
 
             <Button
                 android:id="@+id/createMeetingBtn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="270dp"
                 android:layout_weight="1"
                 android:text="@string/createMeetingBtn" />
 
             <Button
                 android:id="@+id/deleteClubBtn"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="278dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/deleteClubBtn" />
 
             <Button
                 android:id="@+id/viewMeetingsBtn"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="278dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/viewMeetingsBtn" />
 

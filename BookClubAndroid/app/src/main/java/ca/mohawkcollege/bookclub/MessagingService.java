@@ -28,9 +28,10 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
+
         Map<String, String> extraData = remoteMessage.getData();
+        String title = extraData.get("title");
+        String body = extraData.get("body");
 
         if (extraData.get("notificationType").equals("invite")) {
             showBookClubInvite(title, body, extraData.get("bookClubId"));
@@ -71,6 +72,7 @@ public class MessagingService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setStyle(new NotificationCompat.BigTextStyle())
                 .setContentText(message)
                 .setAutoCancel(true)
                 .addAction(R.drawable.common_google_signin_btn_icon_dark, "Accept", acceptPendingIntent)

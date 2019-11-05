@@ -31,11 +31,9 @@ exports.invitesListener = functions.database
 
     // Notification details.
     const payload = {
-      notification: {
-        title: "New invite!",
-        body: `You have been invited to ${bookClubSnapshot.name}`
-      },
       data: {
+        title: "New invite!",
+        body: `You have been invited to ${bookClubSnapshot.name}`,
         bookClubId: bookClubId,
         notificationType: "invite"
       }
@@ -87,11 +85,9 @@ exports.meetingsListener = functions.database
 
     // Notification details.
     const payload = {
-      notification: {
-        title: "New Meeting!",
-        body: `A new meeting has been created for ${bookClubSnapshot.name}!`
-      },
       data: {
+        title: "New Meeting!",
+        body: `A new meeting has been created for ${bookClubSnapshot.name}!`,
         bookClubId: bookClubId,
         notificationType: "meeting",
         date: meetingData.date,

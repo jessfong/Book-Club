@@ -172,7 +172,7 @@ public class BookClubDetails extends AppCompatActivity {
             // If the cursor returned is valid, get the phone number
             if (cursor != null && cursor.moveToFirst()) {
                 int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                String number = "+1" + cursor.getString(numberIndex).replace("(", "").replace(")", "").replace(" ", "").replace("-", "");
+                String number = "+1" + (cursor.getString(numberIndex).replace("(", "").replace(")", "").replace(" ", "").replace("-", "").replace("+1", ""));
 
                 DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
                 Query query = users.orderByChild("phoneNumber").equalTo(number);
