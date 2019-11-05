@@ -1,7 +1,9 @@
 package ca.mohawkcollege.bookclub.helpers;
 
 import android.os.AsyncTask;
+
 import com.google.gson.Gson;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import ca.mohawkcollege.bookclub.objects.bookobjects.Book;
 
@@ -32,7 +35,7 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
             if (statusCode == 200) {
                 InputStream inputStream = new BufferedInputStream(conn.getInputStream());
 
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     results.append(line);
@@ -53,7 +56,7 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
         onDownloadAsyncTask.onComplete(book);
     }
 
-    public interface OnDownloadAsyncTask{
+    public interface OnDownloadAsyncTask {
         void onComplete(Book book);
     }
 }

@@ -5,9 +5,10 @@ public class Member {
     public String bookClubId;
     public String phoneNumber;
 
-    public Member(){}
+    public Member() {
+    }
 
-    public Member(String userId, String bookClubId, String phoneNumber){
+    public Member(String userId, String bookClubId, String phoneNumber) {
         this.userId = userId;
         this.bookClubId = bookClubId;
         this.phoneNumber = phoneNumber;

@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.mohawkcollege.bookclub.R;
-import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 
 
@@ -29,9 +28,9 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
     private List<Meeting> meetings;
 
     /**
-     *      * Constructor to set context and arrayList variables for later use
-     *      * @param context - context
-     *      * @param bookClubInfoResourceId - book_club_info layout resource id
+     * * Constructor to set context and arrayList variables for later use
+     * * @param context - context
+     * * @param bookClubInfoResourceId - book_club_info layout resource id
      */
     public MeetingAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
         super(context, bookClubInfoResourceId);
@@ -41,6 +40,7 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
 
     /**
      * Adds current book club info to bookClubs arrayList
+     *
      * @param meeting - record to add to arrayList
      */
     @Override
@@ -62,15 +62,16 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
         meetings.clear();
     }
 
-    public Meeting getItem(int index){
+    public Meeting getItem(int index) {
         return this.meetings.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     * @param position - record number in the database
+     *
+     * @param position    - record number in the database
      * @param convertView - view of the listItem
-     * @param parent - parent view of the listItem
+     * @param parent      - parent view of the listItem
      * @return custom view of listItem
      */
     @NonNull

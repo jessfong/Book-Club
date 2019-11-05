@@ -1,8 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +36,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
 
     /**
      * Generates list of current user's book clubs
+     *
      * @param savedInstanceState - saved data from last login
      */
     @Override
@@ -66,8 +67,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bookClubAdaptor.clear();
 
-                for (DataSnapshot child: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     final BookClub bookClub = child.getValue(BookClub.class);
 
                     if (bookClub == null) {
@@ -84,14 +84,15 @@ public class RetrieveClubInfo extends AppCompatActivity {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 Member member = child.getValue(Member.class);
 
-                                if(member.userId.equals(firebaseUser.getUid())) {
+                                if (member.userId.equals(firebaseUser.getUid())) {
                                     bookClubAdaptor.add(bookClub);
                                 }
                             }
-                         }
+                        }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
                     });
 
                     // If user is owner of book club add to list of book clubs to display
@@ -107,7 +108,8 @@ public class RetrieveClubInfo extends AppCompatActivity {
              * @param databaseError - error that prevented retrieval of data
              */
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
 
@@ -132,7 +134,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(view.getContext(), BookClubDetails.class);
-                bundle.putSerializable("recordId", (Serializable)bookClubAdaptor.getItem(i));
+                bundle.putSerializable("recordId", bookClubAdaptor.getItem(i));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

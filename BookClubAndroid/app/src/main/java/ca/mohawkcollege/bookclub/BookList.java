@@ -1,7 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.Serializable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import ca.mohawkcollege.bookclub.helpers.BookItemAdaptor;
 import ca.mohawkcollege.bookclub.helpers.DownloadAsyncTask;
-import ca.mohawkcollege.bookclub.helpers.MeetingAdaptor;
 import ca.mohawkcollege.bookclub.objects.bookobjects.Book;
 import ca.mohawkcollege.bookclub.objects.bookobjects.Items;
 
@@ -46,7 +43,7 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
             @Override
             public void onComplete(Book book) {
                 if (book != null && book.items != null && !book.items.isEmpty()) {
-                    for (Items items: book.items) {
+                    for (Items items : book.items) {
                         bookItemAdaptor.add(items);
                     }
 
@@ -79,8 +76,8 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE  && (bookList.getLastVisiblePosition() - bookList.getHeaderViewsCount() - bookList.getFooterViewsCount()) >= (bookItemAdaptor.getCount() - 1)) {
-            if(totalBooks != bookItemAdaptor.getCount() - 1) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && (bookList.getLastVisiblePosition() - bookList.getHeaderViewsCount() - bookList.getFooterViewsCount()) >= (bookItemAdaptor.getCount() - 1)) {
+            if (totalBooks != bookItemAdaptor.getCount() - 1) {
                 Toast.makeText(getApplicationContext(), "Loading books...", Toast.LENGTH_SHORT).show();
 
                 String newUrl = url + "&startIndex=" + (bookItemAdaptor.getCount() - 1);

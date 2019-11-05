@@ -8,9 +8,10 @@ public class BookClub implements Serializable {
     public String imageUrl;
     public String recordId;
 
-    public BookClub(){}
+    public BookClub() {
+    }
 
-    public BookClub(String userId, String name, String imageUrl, String recordId){
+    public BookClub(String userId, String name, String imageUrl, String recordId) {
         this.clubOwner = userId;
         this.name = name;
         this.imageUrl = imageUrl;

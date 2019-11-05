@@ -92,12 +92,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
 
                                 String name = user.name;
                                 if (name == null || TextUtils.isEmpty(name)) {
-                                    String contact = getContactName(getApplicationContext(), user.phoneNumber);
-                                    if (contact == null) {
-                                        name = user.phoneNumber;
-                                    } else {
-                                        name = contact;
-                                    }
+                                    name = user.phoneNumber;
                                 }
 
                                 AttendingView attendingView = new AttendingView(name, user.imageUrl);
@@ -122,35 +117,6 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
-
-    private String getContactName(Context context, String number) {
-
-        String name = null;
-        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "Do not have permission to read contacts!", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        // define the columns I want the query to return
-        String[] projection = new String[]{
-                ContactsContract.PhoneLookup.DISPLAY_NAME,
-                ContactsContract.PhoneLookup._ID};
-
-        // encode the phone number and build the filter URI
-        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-
-        // query time
-        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-            }
-
-            cursor.close();
-        }
-        return name;
     }
 
     @Override

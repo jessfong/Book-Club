@@ -1,9 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +13,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,9 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
-
-import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
 import ca.mohawkcollege.bookclub.helpers.MemberAdapter;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Invite;
@@ -55,7 +52,7 @@ public class BookClubDetails extends AppCompatActivity {
         // Get book club record id form last activity
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
-        bookClub = (BookClub)bundle.getSerializable("recordId");
+        bookClub = (BookClub) bundle.getSerializable("recordId");
 
         // Setting details
         TextView clubNameTextView = findViewById(R.id.clubNameTextView);
@@ -78,7 +75,7 @@ public class BookClubDetails extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Member member = child.getValue(Member.class);
 
-                    if(member.bookClubId.equals(bookClub.recordId)) {
+                    if (member.bookClubId.equals(bookClub.recordId)) {
                         memberAdapter.add(member);
                     }
                 }
@@ -101,7 +98,7 @@ public class BookClubDetails extends AppCompatActivity {
                 String clubOwner = bookClub.clubOwner;
 
                 // If current user is club admin allow them to delete
-                if(uid.equals(clubOwner)){
+                if (uid.equals(clubOwner)) {
                     databaseReference.child("BookClubs").child(bookClub.recordId)
                             .removeValue()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -123,7 +120,7 @@ public class BookClubDetails extends AppCompatActivity {
 
         // If user wants to create a book club meeting, check if user is owner
         final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
-        if(bookClub.clubOwner.equals(firebaseUser.getUid())) {
+        if (bookClub.clubOwner.equals(firebaseUser.getUid())) {
             createMeetingBtn.setVisibility(Button.VISIBLE);
         } else {
             createMeetingBtn.setVisibility(Button.GONE);
@@ -185,7 +182,6 @@ public class BookClubDetails extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 User user = child.getValue(User.class);
-                                Toast.makeText(BookClubDetails.this, "FOUND: " + user.userId, Toast.LENGTH_SHORT).show();
 
                                 // Add user to invites table
                                 // User id, Book club they are gonna join id
