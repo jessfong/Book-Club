@@ -50,7 +50,6 @@
             android:text="@string/startTimeTextView"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginStart="5dp"
             android:layout_below="@id/dateTextView"
             android:layout_marginTop="43dp" />
 
@@ -61,17 +60,18 @@
             android:text="@string/endTimeTextView"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="10dp"
             android:layout_below="@id/startTimeTextView"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="43dp" />
 
         <EditText
             android:id="@+id/locationEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
             android:ems="10"
             android:hint="@string/meetingLocationHint"
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:layout_marginStart="110dp"
             android:enabled="false"
             android:layout_below="@id/createMeetingTextView"
@@ -79,7 +79,8 @@
 
         <EditText
             android:id="@+id/dateEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="50dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/meetingDateHint"
@@ -90,7 +91,8 @@
 
         <EditText
             android:id="@+id/startTimeEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="50dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/meetingTimeHint"
@@ -101,8 +103,9 @@
 
         <EditText
             android:id="@+id/endTimeEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
             android:ems="10"
             android:hint="@string/meetingTimeHint"
             android:inputType="time"

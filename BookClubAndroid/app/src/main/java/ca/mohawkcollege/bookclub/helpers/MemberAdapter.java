@@ -1,23 +1,28 @@
 package ca.mohawkcollege.bookclub.helpers;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.Member;
+import ca.mohawkcollege.bookclub.objects.User;
 
-public class MemberAdapter extends ArrayAdapter<Member> {
+public class MemberAdapter extends ArrayAdapter<User> {
 
-    private final ArrayList<Member> members;
+    private final ArrayList<User> members;
     private final Context context;
 
     /**
@@ -38,12 +43,12 @@ public class MemberAdapter extends ArrayAdapter<Member> {
      * @param member - record to add to arrayList
      */
     @Override
-    public void add(Member member) {
+    public void add(User member) {
         super.add(member);
         members.add(member);
     }
 
-    public Member getItem(int index) {
+    public User getItem(int index) {
         return this.members.get(index);
     }
 
@@ -63,20 +68,19 @@ public class MemberAdapter extends ArrayAdapter<Member> {
         if (listItem == null)
             listItem = LayoutInflater.from(context).inflate(R.layout.member_info, parent, false);
 
-        Member member = members.get(position);
+        User member = members.get(position);
 
-        // TODO: After creating user profiles, use their name from user profile
         TextView userNameTextView = listItem.findViewById(R.id.userNameTextView);
-        userNameTextView.setText(member.userId);
+        userNameTextView.setText(member.getName());
 
-        TextView phoneNumberTextView = listItem.findViewById(R.id.phoneNumberTextView);
-        phoneNumberTextView.setText(member.phoneNumber);
-
-        // TODO: Ensure imageView is not set if userPicImageView is empty
-        /*ImageView userPicImageView = listItem.findViewById(R.id.userPicImageView);
-        Glide.with(context)
-                .load(Uri.parse(member.imageUrl))
-                .into(userPicImageView);*/
+        ImageView userPicImageView = listItem.findViewById(R.id.userPicImageView);
+        if (member.imageUrl != null) {
+            Glide.with(context)
+                    .load(Uri.parse(member.imageUrl))
+                    .into(userPicImageView);
+        } else {
+            userPicImageView.setImageDrawable(getContext().getDrawable(R.mipmap.ic_no_image));
+        }
 
         return listItem;
     }

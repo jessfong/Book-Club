@@ -18,17 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/phoneNumberTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="40dp"
-        android:text="TextView"
-        android:textSize="15sp" />
 
 </RelativeLayout>

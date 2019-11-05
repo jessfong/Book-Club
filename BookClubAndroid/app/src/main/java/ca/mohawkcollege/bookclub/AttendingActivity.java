@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +24,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,12 +38,14 @@ import com.google.firebase.database.ValueEventListener;
 import ca.mohawkcollege.bookclub.helpers.AttendingAdapter;
 import ca.mohawkcollege.bookclub.objects.Attending;
 import ca.mohawkcollege.bookclub.objects.AttendingView;
+import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class AttendingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private Meeting meeting;
+    private BookClub bookClub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +53,60 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_attending);
 
         final String meetingId = getIntent().getStringExtra("meetingID");
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Bundle bundle = getIntent().getExtras();
         meeting = (Meeting) bundle.getSerializable("meeting");
+
+        final Button deleteMeeting = findViewById(R.id.deleteMeeting);
+        deleteMeeting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bookClub != null && firebaseUser.getUid().equals(bookClub.clubOwner)) {
+                    DatabaseReference meetings = FirebaseDatabase.getInstance().getReference("Meetings");
+                    meetings.child(meeting.meetingId)
+                            .removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i("DELETED", "DocumentSnapshot successfully deleted!");
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i("ERROR DELETING", "Error deleting document", e);
+                                }
+                            });
+
+                    Toast.makeText(AttendingActivity.this, "Deleted meeting!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
+
+        DatabaseReference members = FirebaseDatabase.getInstance().getReference("BookClubs");
+        Query query = members.orderByChild("recordId").equalTo(meeting.bookClubId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    bookClub = child.getValue(BookClub.class);
+                    if (bookClub == null)
+                        continue;
+
+                    if (!firebaseUser.getUid().equals(bookClub.clubOwner)) {
+                        deleteMeeting.setVisibility(Button.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         TextView owner = findViewById(R.id.meetingTextView);
         owner.setText(getIntent().getStringExtra("owner"));
@@ -63,7 +121,6 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         }
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = firebaseDatabase.getReference("Attending");
 
         final ListView listView = findViewById(R.id.attendingListView);

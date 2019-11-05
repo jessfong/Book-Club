@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,8 +31,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.mohawkcollege.bookclub.helpers.MemberAdapter;
+import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Invite;
+import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
@@ -58,8 +61,25 @@ public class BookClubDetails extends AppCompatActivity {
         TextView clubNameTextView = findViewById(R.id.clubNameTextView);
         clubNameTextView.setText(bookClub.name);
 
-        TextView adminNameTextView = findViewById(R.id.clubAdminTextView);
-        adminNameTextView.setText(bookClub.clubOwner);
+        final TextView adminNameTextView = findViewById(R.id.clubAdminTextView);
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = users.orderByChild("userId").equalTo(bookClub.clubOwner);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    User user = child.getValue(User.class);
+                    if (user == null)
+                        continue;
+
+                    adminNameTextView.setText(user.getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         ImageView infoBookClubImageView = findViewById(R.id.clubImageView);
         Glide.with(this)
@@ -74,9 +94,28 @@ public class BookClubDetails extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Member member = child.getValue(Member.class);
+                    if (member == null)
+                        continue;
 
                     if (member.bookClubId.equals(bookClub.recordId)) {
-                        memberAdapter.add(member);
+                        DatabaseReference members = FirebaseDatabase.getInstance().getReference("Users");
+                        Query query = members.orderByChild("userId").equalTo(member.userId);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    User user = child.getValue(User.class);
+                                    if (user == null)
+                                        continue;
+
+                                    memberAdapter.add(user);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
                     }
                 }
             }
@@ -105,6 +144,7 @@ public class BookClubDetails extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.i("DELETED", "DocumentSnapshot successfully deleted!");
+                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -113,8 +153,9 @@ public class BookClubDetails extends AppCompatActivity {
                                     Log.i("ERROR DELETING", "Error deleting document", e);
                                 }
                             });
+                } else {
+                    Toast.makeText(BookClubDetails.this, "Only the club admin can delete.", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(BookClubDetails.this, "Only the club admin can delete.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -122,8 +163,10 @@ public class BookClubDetails extends AppCompatActivity {
         final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
         if (bookClub.clubOwner.equals(firebaseUser.getUid())) {
             createMeetingBtn.setVisibility(Button.VISIBLE);
+            deleteClubBtn.setVisibility(Button.VISIBLE);
         } else {
             createMeetingBtn.setVisibility(Button.GONE);
+            deleteClubBtn.setVisibility(Button.GONE);
         }
 
         createMeetingBtn.setOnClickListener(new View.OnClickListener() {
@@ -181,14 +224,46 @@ public class BookClubDetails extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                User user = child.getValue(User.class);
+                                final User user = child.getValue(User.class);
+                                if (user == null)
+                                    continue;
+                                
+                                if (user.userId.equals(bookClub.clubOwner)) {
+                                    Toast.makeText(BookClubDetails.this, "You can't invite yourself!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
 
-                                // Add user to invites table
-                                // User id, Book club they are gonna join id
-                                DatabaseReference invites = FirebaseDatabase.getInstance().getReference("Invites");
-                                Invite invite = new Invite(user.userId, bookClub.recordId);
-                                String key = invites.push().getKey();
-                                invites.child(key).setValue(invite);
+                                DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+                                Query query = members.orderByChild("userId").equalTo(user.userId);
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        boolean exists = false;
+                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                            Member memberInvited = child.getValue(Member.class);
+                                            if (memberInvited == null)
+                                                continue;
+                                            
+                                            if (memberInvited.bookClubId.equals(bookClub.recordId)) {
+                                                exists = true;
+                                                break;
+                                            }
+                                        }
+                                        
+                                        if (exists) {
+                                            Toast.makeText(BookClubDetails.this, "That user is already a member!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            DatabaseReference invites = FirebaseDatabase.getInstance().getReference("Invites");
+                                            Invite invite = new Invite(user.userId, bookClub.recordId);
+                                            String key = invites.push().getKey();
+                                            invites.child(key).setValue(invite);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
                             }
                         } else {
                             Toast.makeText(BookClubDetails.this, "Contact is not a book club user", Toast.LENGTH_SHORT).show();

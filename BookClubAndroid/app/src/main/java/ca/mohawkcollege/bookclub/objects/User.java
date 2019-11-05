@@ -1,5 +1,7 @@
 package ca.mohawkcollege.bookclub.objects;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -27,5 +29,13 @@ public class User implements Serializable {
         this.token = token;
         this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public String getName() {
+        if (name != null && !TextUtils.isEmpty(name)) {
+            return name;
+        }
+
+        return phoneNumber;
     }
 }

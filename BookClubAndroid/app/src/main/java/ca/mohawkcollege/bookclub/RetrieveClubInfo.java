@@ -83,6 +83,8 @@ public class RetrieveClubInfo extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 Member member = child.getValue(Member.class);
+                                if (member == null)
+                                    continue;
 
                                 if (member.userId.equals(firebaseUser.getUid())) {
                                     bookClubAdaptor.add(bookClub);
