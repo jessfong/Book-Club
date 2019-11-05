@@ -1,23 +1,18 @@
 package ca.mohawkcollege.bookclub.helpers;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 
 import ca.mohawkcollege.bookclub.R;
-import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Member;
 
 public class MemberAdapter extends ArrayAdapter<Member> {
@@ -27,7 +22,8 @@ public class MemberAdapter extends ArrayAdapter<Member> {
 
     /**
      * Constructor to set context and arrayList variables for later use
-     * @param context - context
+     *
+     * @param context              - context
      * @param memberInfoResourceId - member_info layout resource id
      */
     public MemberAdapter(Context context, int memberInfoResourceId) {
@@ -38,6 +34,7 @@ public class MemberAdapter extends ArrayAdapter<Member> {
 
     /**
      * Adds current member info to members arrayList
+     *
      * @param member - record to add to arrayList
      */
     @Override
@@ -46,15 +43,16 @@ public class MemberAdapter extends ArrayAdapter<Member> {
         members.add(member);
     }
 
-    public Member getItem(int index){
+    public Member getItem(int index) {
         return this.members.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     * @param position - record number in the database
+     *
+     * @param position    - record number in the database
      * @param convertView - view of the listItem
-     * @param parent - parent view of the listItem
+     * @param parent      - parent view of the listItem
      * @return custom view of listItem
      */
     @NonNull

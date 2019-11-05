@@ -1,15 +1,14 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,16 +16,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
-
-import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
 import ca.mohawkcollege.bookclub.helpers.MeetingAdaptor;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
-import ca.mohawkcollege.bookclub.objects.Member;
 
 public class ViewMeetings extends AppCompatActivity {
 
@@ -45,7 +39,7 @@ public class ViewMeetings extends AppCompatActivity {
         // Get book club record id form last activity
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
-        bookClub = (BookClub)bundle.getSerializable("recordId");
+        bookClub = (BookClub) bundle.getSerializable("recordId");
 
         TextView adminNameTextView = findViewById(R.id.clubAdminTextView);
         adminNameTextView.setText(bookClub.clubOwner);
@@ -59,8 +53,7 @@ public class ViewMeetings extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 meetingAdaptor.clear();
 
-                for (DataSnapshot child: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     final Meeting meeting = child.getValue(Meeting.class);
                     if (meeting != null && meeting.bookClubId.equals(bookClub.recordId)) {
                         meetingAdaptor.add(meeting);
@@ -76,15 +69,22 @@ public class ViewMeetings extends AppCompatActivity {
              * @param databaseError - error that prevented retrieval of data
              */
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Meeting meeting = meetingAdaptor.getItem(i);
+                if (meeting == null)
+                    return;
+
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(view.getContext(), AttendingActivity.class);
-                bundle.putString("meetingID", meetingAdaptor.getItem(i).meetingId);
+                bundle.putString("meetingID", meeting.meetingId);
+                bundle.putString("owner", bookClub.clubOwner);
+                bundle.putSerializable("meeting", meeting);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

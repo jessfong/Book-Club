@@ -1,21 +1,26 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,14 +31,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.mohawkcollege.bookclub.helpers.AttendingAdapter;
-import ca.mohawkcollege.bookclub.helpers.MeetingAdaptor;
 import ca.mohawkcollege.bookclub.objects.Attending;
 import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.Meeting;
-import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
-public class AttendingActivity extends AppCompatActivity {
+public class AttendingActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private Meeting meeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,21 @@ public class AttendingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attending);
 
         final String meetingId = getIntent().getStringExtra("meetingID");
+
+        Bundle bundle = getIntent().getExtras();
+        meeting = (Meeting) bundle.getSerializable("meeting");
+
+        TextView owner = findViewById(R.id.meetingTextView);
+        owner.setText(getIntent().getStringExtra("owner"));
+
+        TextView date = findViewById(R.id.meetingDate);
+        date.setText(String.format("%s @ %s - %s", meeting.date, meeting.startTime, meeting.endTime));
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -54,8 +74,7 @@ public class AttendingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 attendingAdaptor.clear();
 
-                for (DataSnapshot child: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     final Attending attending = child.getValue(Attending.class);
                     if (attending == null || !attending.meetingId.equals(meetingId))
                         continue;
@@ -87,7 +106,8 @@ public class AttendingActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
                     });
                 }
 
@@ -99,48 +119,21 @@ public class AttendingActivity extends AppCompatActivity {
              * @param databaseError - error that prevented retrieval of data
              */
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
-    }
-
-    public String getContactName(final String phoneNumber, Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "Do not have permission to read contacts!", Toast.LENGTH_SHORT).show();
-                return "";
-            }
-        }
-        
-        Uri uri=Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,Uri.encode(phoneNumber));
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
-        String contactName = "";
-        Cursor cursor=context.getContentResolver().query(uri,projection,null,null,null);
-
-        if (cursor != null) {
-            if(cursor.moveToFirst()) {
-                contactName=cursor.getString(0);
-            }
-            cursor.close();
-        }
-
-        return contactName;
     }
 
     private String getContactName(Context context, String number) {
 
         String name = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "Do not have permission to read contacts!", Toast.LENGTH_SHORT).show();
-                return null;
-            }
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, "Do not have permission to read contacts!", Toast.LENGTH_SHORT).show();
+            return null;
         }
 
         // define the columns I want the query to return
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 ContactsContract.PhoneLookup.DISPLAY_NAME,
                 ContactsContract.PhoneLookup._ID};
 
@@ -150,7 +143,7 @@ public class AttendingActivity extends AppCompatActivity {
         // query time
         Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
 
-        if(cursor != null) {
+        if (cursor != null) {
             if (cursor.moveToFirst()) {
                 name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
             }
@@ -158,5 +151,15 @@ public class AttendingActivity extends AppCompatActivity {
             cursor.close();
         }
         return name;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (meeting != null) {
+            LatLng location = new LatLng(meeting.latitude, meeting.latitude);
+            googleMap.addMarker(new MarkerOptions().position(location)
+                    .title("BookClub Location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        }
     }
 }

@@ -10,7 +10,8 @@ public class User implements Serializable {
     public String name;
     public String imageUrl;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String userId, String phoneNumber, String email, String token) {
         this.userId = userId;

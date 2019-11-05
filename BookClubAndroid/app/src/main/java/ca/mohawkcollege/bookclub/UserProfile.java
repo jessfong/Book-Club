@@ -1,8 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import ca.mohawkcollege.bookclub.helpers.OnUploadImage;
-import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class UserProfile extends AppCompatActivity {
@@ -86,7 +85,8 @@ public class UserProfile extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
         Button imageButton = findViewById(R.id.userProfilePicUploadImageBtn);
@@ -114,25 +114,25 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
-    public void chooseImage(){
+    public void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     /**
      * Display gallery image in createBookClub view
+     *
      * @param requestCode - code determining where the request came from
-     * @param resultCode - code determining what the result was
-     * @param data - data returned from the activity
+     * @param resultCode  - code determining what the result was
+     * @param data        - data returned from the activity
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageFile = data.getData();
             try {
                 // Display image when user still creating book club
@@ -156,7 +156,7 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private void uploadImage(final OnUploadImage onUploadImage) {
-        StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+        StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
         ref.putFile(imageFile)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     /**

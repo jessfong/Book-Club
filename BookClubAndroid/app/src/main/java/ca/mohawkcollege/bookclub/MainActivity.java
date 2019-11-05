@@ -1,31 +1,25 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,16 +30,13 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
 import ca.mohawkcollege.bookclub.objects.Attending;
-import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
@@ -57,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Signs in user, retrieves list of user's book clubs, and allows users to create a new book club
+     *
      * @param savedInstanceState - saved data from last login
      */
     @Override
@@ -111,9 +103,10 @@ public class MainActivity extends AppCompatActivity {
      * Gets called whenever an activity returns a result.
      * When the requestCode is RC_SIGN_IN we are checking if the user is signed in.
      * If the resultCode is RESULT_OK user sign in was successful.
+     *
      * @param requestCode - code determining where the request came from
-     * @param resultCode - code determining what the result was
-     * @param data - data returned from the activity
+     * @param resultCode  - code determining what the result was
+     * @param data        - data returned from the activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -154,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
                                 });
                             }
                         });

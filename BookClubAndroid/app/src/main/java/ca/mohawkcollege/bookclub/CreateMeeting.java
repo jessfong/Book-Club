@@ -1,11 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +27,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 
+import static com.schibstedspain.leku.LocationPickerActivityKt.LATITUDE;
 import static com.schibstedspain.leku.LocationPickerActivityKt.LOCATION_ADDRESS;
+import static com.schibstedspain.leku.LocationPickerActivityKt.LONGITUDE;
 
 public class CreateMeeting extends AppCompatActivity {
 
@@ -43,6 +42,8 @@ public class CreateMeeting extends AppCompatActivity {
     public String bookTitle;
     public String authors;
     public String thumb;
+    public double latitude;
+    public double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +183,7 @@ public class CreateMeeting extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Time cannot be empty.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
+
                 if (bookTitle == null) {
                     Toast.makeText(getApplicationContext(), "A book must be selected.", Toast.LENGTH_SHORT).show();
                     return;
@@ -191,7 +192,7 @@ public class CreateMeeting extends AppCompatActivity {
                 // Create new firebase meeting object
                 DatabaseReference meetings = FirebaseDatabase.getInstance().getReference("Meetings");
                 String key = meetings.push().getKey();
-                Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText, bookTitle, authors, thumb);
+                Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText, bookTitle, authors, thumb, latitude, longitude);
                 meetings.child(key).setValue(meeting);
                 Toast.makeText(getApplicationContext(), "Successfully created new meeting!", Toast.LENGTH_SHORT).show();
             }
@@ -211,6 +212,9 @@ public class CreateMeeting extends AppCompatActivity {
                 String address = data.getStringExtra(LOCATION_ADDRESS);
                 EditText locationText = findViewById(R.id.locationEditText);
                 locationText.setText(address);
+
+                latitude = data.getDoubleExtra(LATITUDE, 0.0);
+                longitude = data.getDoubleExtra(LONGITUDE, 0.0);
                 Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
             }
 
@@ -243,7 +247,8 @@ public class CreateMeeting extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 

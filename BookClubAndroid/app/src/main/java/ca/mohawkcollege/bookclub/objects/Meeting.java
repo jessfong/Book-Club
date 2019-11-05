@@ -1,6 +1,8 @@
 package ca.mohawkcollege.bookclub.objects;
 
-public class Meeting {
+import java.io.Serializable;
+
+public class Meeting implements Serializable {
     public String meetingId;
     public String bookClubId;
     public String location;
@@ -10,10 +12,13 @@ public class Meeting {
     public String bookTitle;
     public String bookAuthor;
     public String bookThumb;
+    public double latitude;
+    public double longitude;
 
-    public Meeting(){}
+    public Meeting() {
+    }
 
-    public Meeting(String meetingId, String bookClubId, String location, String date, String startTime, String endTime, String bookTitle, String bookAuthor, String bookThumb) {
+    public Meeting(String meetingId, String bookClubId, String location, String date, String startTime, String endTime, String bookTitle, String bookAuthor, String bookThumb, double latitude, double longitude) {
         this.meetingId = meetingId;
         this.bookClubId = bookClubId;
         this.location = location;
@@ -23,5 +28,7 @@ public class Meeting {
         this.bookTitle = bookTitle;
         this.bookAuthor = bookAuthor;
         this.bookThumb = bookThumb;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

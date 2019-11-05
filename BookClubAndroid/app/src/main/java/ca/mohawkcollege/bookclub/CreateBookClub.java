@@ -1,8 +1,5 @@
 package ca.mohawkcollege.bookclub;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,6 +45,7 @@ public class CreateBookClub extends AppCompatActivity {
 
     /**
      * Gathers data for new book club and writes it to BookClubs table in firebase
+     *
      * @param savedInstanceState - saved data from last login
      */
     @Override
@@ -71,7 +72,7 @@ public class CreateBookClub extends AppCompatActivity {
             }
         });
 
-        if(user != null){
+        if (user != null) {
             // When create book club button is clicked
             Button button = findViewById(R.id.createBookClubBtn);
             button.setOnClickListener(new View.OnClickListener() {
@@ -98,25 +99,25 @@ public class CreateBookClub extends AppCompatActivity {
     }
 
     // Allow user to choose book club image from gallery
-    public void chooseImage(){
+    public void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     /**
      * Display gallery image in createBookClub view
+     *
      * @param requestCode - code determining where the request came from
-     * @param resultCode - code determining what the result was
-     * @param data - data returned from the activity
+     * @param resultCode  - code determining what the result was
+     * @param data        - data returned from the activity
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageFile = data.getData();
             try {
                 // Display image when user still creating book club
@@ -132,7 +133,7 @@ public class CreateBookClub extends AppCompatActivity {
 
     // Writing chosen image uri to firebase BookClubs table
     private void uploadImage(final OnUploadImage onUploadImage) {
-        StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+        StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
         ref.putFile(imageFile)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     /**
@@ -169,7 +170,7 @@ public class CreateBookClub extends AppCompatActivity {
     }
 
     // Add new book club to database
-    public void writeNewClub(final String user, final String bookClubName){
+    public void writeNewClub(final String user, final String bookClubName) {
         uploadImage(new OnUploadImage() {
             /**
              * Writes book club data to database once image uri is retrieved
@@ -182,8 +183,7 @@ public class CreateBookClub extends AppCompatActivity {
                 if (key != null) {
                     BookClub bookClub = new BookClub(user, bookClubName, result.toString(), key);
                     mDatabase.child(key).setValue(bookClub);
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Book club name cannot be empty.", Toast.LENGTH_SHORT).show();
                 }
             }

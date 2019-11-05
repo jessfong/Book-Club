@@ -14,16 +14,12 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import ca.mohawkcollege.bookclub.R;
-import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.bookobjects.Items;
 
 
@@ -33,9 +29,9 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
     private List<Items> itemsList;
 
     /**
-     *      * Constructor to set context and arrayList variables for later use
-     *      * @param context - context
-     *      * @param bookClubInfoResourceId - book_club_info layout resource id
+     * * Constructor to set context and arrayList variables for later use
+     * * @param context - context
+     * * @param bookClubInfoResourceId - book_club_info layout resource id
      */
     public BookItemAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
         super(context, bookClubInfoResourceId);
@@ -45,6 +41,7 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
 
     /**
      * Adds current book club info to bookClubs arrayList
+     *
      * @param items - record to add to arrayList
      */
     @Override
@@ -56,7 +53,7 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
     @Override
     public void addAll(Items... items) {
         super.addAll(items);
-        for (Items item: items) {
+        for (Items item : items) {
             add(item);
         }
     }
@@ -70,7 +67,7 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
     public void addAll(Collection<? extends Items> collection) {
         if (collection != null) {
             super.addAll(collection);
-            for (Items item: collection) {
+            for (Items item : collection) {
                 add(item);
             }
         }
@@ -89,15 +86,16 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
         itemsList.clear();
     }
 
-    public Items getItem(int index){
+    public Items getItem(int index) {
         return this.itemsList.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     * @param position - record number in the database
+     *
+     * @param position    - record number in the database
      * @param convertView - view of the listItem
-     * @param parent - parent view of the listItem
+     * @param parent      - parent view of the listItem
      * @return custom view of listItem
      */
     @NonNull

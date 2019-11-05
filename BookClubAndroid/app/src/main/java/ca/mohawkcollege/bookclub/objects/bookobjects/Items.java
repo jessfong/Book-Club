@@ -16,11 +16,11 @@ public class Items {
     public String getAuthors() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        if(volumeInfo.authors == null){
+        if (volumeInfo.authors == null) {
             return "No authors";
         }
 
-        for (String author: volumeInfo.authors) {
+        for (String author : volumeInfo.authors) {
             stringBuilder.append(author).append(", ");
         }
 
