@@ -26,8 +26,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".BookList"></activity>
+        <activity android:name=".BookSearch" />
+        <activity android:name=".UserProfile" />
         <activity android:name=".AttendingActivity" />
         <activity android:name=".ViewMeetings" />
 

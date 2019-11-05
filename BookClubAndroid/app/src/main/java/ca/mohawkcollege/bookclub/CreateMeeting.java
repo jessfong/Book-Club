@@ -143,6 +143,16 @@ public class CreateMeeting extends AppCompatActivity {
             }
         });
 
+        // When choose book button is clicked
+        Button addBookBtn = findViewById(R.id.addBook);
+        addBookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CreateMeeting.this, BookSearch.class);
+                startActivity(intent);
+            }
+        });
+
         // When invite members button is clicked a meeting invite gets sent to everyone in the club
         Button inviteButton = findViewById(R.id.setMeetingBtn);
         inviteButton.setOnClickListener(new View.OnClickListener() {

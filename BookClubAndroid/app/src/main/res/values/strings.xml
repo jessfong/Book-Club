@@ -25,4 +25,10 @@
     <string name="userProfileTextInfo">Here you can upload your profile picture and set your display name!</string>
     <string name="userProfileName">Your name</string>
     <string name="saveUserProfile">Save user profile</string>
+    <string name="chooseBookText">Choose a book</string>
+    <string name="search_for_book">Search For Book</string>
+    <string name="enter_search">Enter search...</string>
+    <string name="search">Search</string>
+    <string name="author">Author</string>
+    <string name="title">Title</string>
 </resources>
