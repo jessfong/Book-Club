@@ -1,14 +1,19 @@
 package ca.mohawkcollege.bookclub.helpers;
 
 import android.content.Context;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -63,9 +68,18 @@ public class AttendingAdapter extends ArrayAdapter<AttendingView> {
 
         AttendingView attendingView = attendingViews.get(position);
 
-        // TODO: After creating user profiles, use their name from user profile
         TextView userNameTextView = listItem.findViewById(R.id.attendingName);
         userNameTextView.setText(attendingView.name);
+
+        ImageView attendingImage = listItem.findViewById(R.id.attendingImage);
+
+        if (attendingView.imageUrl != null && !TextUtils.isEmpty(attendingView.imageUrl)) {
+            Glide.with(context)
+                    .load(Uri.parse(attendingView.imageUrl))
+                    .into(attendingImage);
+        } else {
+            // TODO: Default image
+        }
 
         return listItem;
     }

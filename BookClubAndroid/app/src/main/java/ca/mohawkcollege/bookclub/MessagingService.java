@@ -12,8 +12,12 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -126,13 +130,30 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onNewToken(@NonNull String s) {
+    public void onNewToken(@NonNull final String s) {
         super.onNewToken(s);
         try {
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-            User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), s, "");
-            mDatabase.child(user.userId).setValue(user);
+            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            final DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
+            Query query = users.orderByChild("userId").equalTo(firebaseUser.getUid());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User user = child.getValue(User.class);
+                        if (user == null)
+                            continue;
+
+                        user.token = s;
+                        user.phoneNumber = firebaseUser.getPhoneNumber();
+                        user.email = firebaseUser.getEmail();
+                        users.child(user.userId).setValue(user);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
+            });
         } catch (NullPointerException e) {
 
         }

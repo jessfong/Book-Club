@@ -67,6 +67,7 @@ public class ViewMeetings extends AppCompatActivity {
                     }
                 }
 
+                meetingAdaptor.reverse();
                 listView.setAdapter(meetingAdaptor);
             }
 

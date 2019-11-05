@@ -72,7 +72,7 @@ public class AttendingActivity extends AppCompatActivity {
                                     continue;
 
                                 String name = user.name;
-                                if (TextUtils.isEmpty(name)) {
+                                if (name == null || TextUtils.isEmpty(name)) {
                                     String contact = getContactName(getApplicationContext(), user.phoneNumber);
                                     if (contact == null) {
                                         name = user.phoneNumber;
@@ -81,7 +81,7 @@ public class AttendingActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                AttendingView attendingView = new AttendingView(name);
+                                AttendingView attendingView = new AttendingView(name, user.imageUrl);
                                 attendingAdaptor.add(attendingView);
                             }
                         }

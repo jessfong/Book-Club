@@ -21,4 +21,8 @@
     <string name="meetingTimeHint">11:30</string>
     <string name="viewMeetingTextView">Here are all your club Meetings!</string>
     <string name="attendingTextView">Attending Members</string>
+    <string name="user_profile">User Profile</string>
+    <string name="userProfileTextInfo">Here you can upload your profile picture and set your display name!</string>
+    <string name="userProfileName">Your name</string>
+    <string name="saveUserProfile">Save user profile</string>
 </resources>

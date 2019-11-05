@@ -3,7 +3,6 @@ package ca.mohawkcollege.bookclub;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,18 +11,23 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -32,38 +36,60 @@ import java.io.IOException;
 import java.util.UUID;
 
 import ca.mohawkcollege.bookclub.helpers.OnUploadImage;
-import ca.mohawkcollege.bookclub.objects.BookClub;
+import ca.mohawkcollege.bookclub.objects.AttendingView;
+import ca.mohawkcollege.bookclub.objects.User;
 
-public class CreateBookClub extends AppCompatActivity {
+public class UserProfile extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri imageFile;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
-    private final int PICK_IMAGE_REQUEST = 71;
-    private Context context;
-    private Uri imageFile;
+    private DatabaseReference users;
+    private User userData;
 
-    /**
-     * Gathers data for new book club and writes it to BookClubs table in firebase
-     * @param savedInstanceState - saved data from last login
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_book_club);
-        context = this;
+        setContentView(R.layout.activity_user_profile);
 
-        // Set instance of database and user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference("BookClubs");
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        final TextView name = findViewById(R.id.createBookClubNameEditText);
+        final EditText displayName = findViewById(R.id.userProfileName);
+        final ImageView imageView = findViewById(R.id.userProfilePic);
 
-        // When user clicks on button to upload book club image
-        Button imageButton = findViewById(R.id.createBookClubUploadImageBtn);
+        users = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = users.orderByChild("userId").equalTo(user.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    User user = child.getValue(User.class);
+                    if (user == null)
+                        continue;
+
+                    if (user.name != null && !TextUtils.isEmpty(user.name)) {
+                        displayName.setText(user.name);
+                    }
+
+                    if (user.imageUrl != null && !TextUtils.isEmpty(user.imageUrl)) {
+                        imageFile = Uri.parse(user.imageUrl);
+                        Glide.with(getApplicationContext())
+                                .load(imageFile)
+                                .into(imageView);
+                    }
+
+                    userData = user;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+
+        Button imageButton = findViewById(R.id.userProfilePicUploadImageBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,33 +97,23 @@ public class CreateBookClub extends AppCompatActivity {
             }
         });
 
-        if(user != null){
-            // When create book club button is clicked
-            Button button = findViewById(R.id.createBookClubBtn);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (name.getText() == null || TextUtils.isEmpty(name.getText())) {
-                        Toast.makeText(getApplicationContext(), "Book club name cannot be empty.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (imageFile == null) {
-                        Toast.makeText(getApplicationContext(), "You must select an image!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    writeNewClub(user.getUid(), name.getText().toString());
-
-                    Intent acceptIntent = new Intent(view.getContext(), RetrieveClubInfo.class);
-                    acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    view.getContext().startActivity(acceptIntent);
+        Button saveChanges = findViewById(R.id.saveUserProfile);
+        saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = displayName.getText().toString();
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(UserProfile.this, "You must fill in a display name!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            });
-        }
+
+                userData.name = name;
+                users.child(userData.userId).setValue(userData);
+                Toast.makeText(UserProfile.this, "Saved user profile!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // Allow user to choose book club image from gallery
     public void chooseImage(){
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -122,15 +138,23 @@ public class CreateBookClub extends AppCompatActivity {
                 // Display image when user still creating book club
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageFile);
 
-                ImageView imageView = findViewById(R.id.createBookClubUploadedImageView);
+                ImageView imageView = findViewById(R.id.userProfilePic);
                 imageView.setImageBitmap(bitmap);
+
+                uploadImage(new OnUploadImage() {
+                    @Override
+                    public void onComplete(Uri result) {
+                        userData.imageUrl = result.toString();
+                        users.child(userData.userId).setValue(userData);
+                        Toast.makeText(UserProfile.this, "Uploaded profile picture!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // Writing chosen image uri to firebase BookClubs table
     private void uploadImage(final OnUploadImage onUploadImage) {
         StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
         ref.putFile(imageFile)
@@ -163,30 +187,8 @@ public class CreateBookClub extends AppCompatActivity {
                      */
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    // Add new book club to database
-    public void writeNewClub(final String user, final String bookClubName){
-        uploadImage(new OnUploadImage() {
-            /**
-             * Writes book club data to database once image uri is retrieved
-             * @param result - result of uploaded record
-             */
-            @Override
-            public void onComplete(Uri result) {
-                String key = mDatabase.push().getKey();
-
-                if (key != null) {
-                    BookClub bookClub = new BookClub(user, bookClubName, result.toString(), key);
-                    mDatabase.child(key).setValue(bookClub);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Book club name cannot be empty.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 }

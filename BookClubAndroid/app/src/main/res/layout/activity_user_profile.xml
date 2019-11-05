@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UserProfile">
+
+    <ImageView
+        android:id="@+id/userProfilePic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginRight="55dp"
+        android:layout_marginBottom="300dp"/>
+
+    <EditText
+        android:id="@+id/userProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/userProfileName"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/saveUserProfile"
+        android:layout_marginBottom="50dp"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/userProfilePicUploadImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/createBookClubUploadImageBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="450dp"/>
+
+    <Button
+        android:id="@+id/saveUserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/saveUserProfile"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"/>
+
+    <TextView
+        android:id="@+id/userProfileTextInfo"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="@string/userProfileTextInfo"
+        android:textSize="18sp" />
+
+</RelativeLayout>

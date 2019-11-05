@@ -28,8 +28,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -67,10 +71,16 @@ public class MainActivity extends AppCompatActivity {
                         1);
             }
 
+            if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CALENDAR},
+                        2);
+            }
+
             if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_CONTACTS},
-                        2);
+                        3);
             }
         }
 
@@ -120,16 +130,34 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseInstanceId.getInstance().getInstanceId()
                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                             @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            public void onComplete(@NonNull final Task<InstanceIdResult> task) {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(MainActivity.this, "Failed to get token", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
                                 // Get new Instance ID token
-                                String token = task.getResult().getToken();
-                                User user = new User(firebaseUser.getUid(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail(), token, "");
-                                mDatabase.child(user.userId).setValue(user);
+                                DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
+                                Query query = users.orderByChild("userId").equalTo(firebaseUser.getUid());
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                            User user = child.getValue(User.class);
+                                            if (user == null)
+                                                continue;
+
+                                            String token = task.getResult().getToken();
+                                            user.token = token;
+                                            user.phoneNumber = firebaseUser.getPhoneNumber();
+                                            user.email = firebaseUser.getEmail();
+                                            mDatabase.child(user.userId).setValue(user);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
                             }
                         });
 
@@ -193,9 +221,21 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(this, "No permission to write to calendar!", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
+
+                                if (checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                                    Toast.makeText(this, "No permission to read calendar!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                             }
 
-                            cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                            Uri event = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+                            ContentValues reminderValues = new ContentValues();
+                            reminderValues.put("event_id", Long.parseLong(event.getLastPathSegment()));
+                            reminderValues.put("method", 1);
+                            reminderValues.put("minutes", 60);
+                            cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues);
+
                             Toast.makeText(this, "Added meeting to calendar!", Toast.LENGTH_SHORT).show();
                         }
                     }

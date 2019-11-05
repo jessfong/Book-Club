@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ca.mohawkcollege.bookclub.R;
@@ -46,6 +47,10 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
     public void add(Meeting meeting) {
         super.add(meeting);
         meetings.add(meeting);
+    }
+
+    public void reverse() {
+        Collections.reverse(meetings);
     }
 
     /**
