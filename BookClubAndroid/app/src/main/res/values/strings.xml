@@ -31,4 +31,5 @@
     <string name="search">Search</string>
     <string name="author">Author</string>
     <string name="title">Title</string>
+    <string name="past_meetings">Past Meetings</string>
 </resources>
