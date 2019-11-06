@@ -17,11 +17,21 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/clubAdminTextView"
+        android:id="@+id/clubAdminTextViewLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
+        android:text="@string/owner"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/clubAdminTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/clubAdminTextViewLabel"
         android:text="TextView"
         android:textSize="18sp" />
 

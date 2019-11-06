@@ -32,4 +32,8 @@
     <string name="author">Author</string>
     <string name="title">Title</string>
     <string name="past_meetings">Past Meetings</string>
+    <string name="location">Location:</string>
+    <string name="owner">Owner:</string>
+    <string name="date">Date:</string>
+    <string name="club_name">Club Name:</string>
 </resources>

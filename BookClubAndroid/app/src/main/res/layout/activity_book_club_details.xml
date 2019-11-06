@@ -18,21 +18,40 @@
             android:layout_marginEnd="120dp" />
 
         <TextView
-            android:id="@+id/clubNameTextView"
+            android:id="@+id/clubNameTextViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="200dp"
-            android:layout_marginBottom="620dp"
+            android:text="@string/club_name"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/clubNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/clubNameTextViewLabel"
             android:text="TextView"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/clubAdminTextViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/clubNameTextView"
+            android:textStyle="bold"
+            android:text="@string/owner"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/clubAdminTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="235dp"
+            android:layout_below="@id/clubAdminTextViewLabel"
             android:text="TextView"
             android:textSize="18sp" />
 

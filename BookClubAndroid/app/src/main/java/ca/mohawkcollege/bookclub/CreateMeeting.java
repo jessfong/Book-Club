@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +30,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import ca.mohawkcollege.bookclub.objects.Attending;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.Member;
 
@@ -48,7 +52,10 @@ public class CreateMeeting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_create_meeting);
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         // Get book club record id form last activity
         Intent intent = getIntent();
@@ -170,17 +177,17 @@ public class CreateMeeting extends AppCompatActivity {
                 final String locationText = locationEditText.getText().toString();
 
                 if (dateText == null) {
-                    Toast.makeText(getApplicationContext(), "Date cannot be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Date must be set.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (startTimeText == null) {
-                    Toast.makeText(getApplicationContext(), "Time cannot be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Start time must be set.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (endTimeText == null) {
-                    Toast.makeText(getApplicationContext(), "Time cannot be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "End time must be set.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -194,9 +201,26 @@ public class CreateMeeting extends AppCompatActivity {
                 String key = meetings.push().getKey();
                 Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText, bookTitle, authors, thumb, latitude, longitude);
                 meetings.child(key).setValue(meeting);
+
+                DatabaseReference attending = FirebaseDatabase.getInstance().getReference("Attending");
+                String attendingKey = attending.push().getKey();
+                Attending attendingUser = new Attending(key, user.getUid());
+                attending.child(attendingKey).setValue(attendingUser);
+
                 Toast.makeText(getApplicationContext(), "Successfully created new meeting!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public interface onComplete {

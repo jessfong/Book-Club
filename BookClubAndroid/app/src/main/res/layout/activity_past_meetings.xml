@@ -17,11 +17,21 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/userNameTextView"
+        android:id="@+id/userNameTextViewLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
+        android:textStyle="bold"
+        android:text="@string/owner"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_below="@id/userNameTextViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="TextView"
         android:textSize="18sp" />
 
