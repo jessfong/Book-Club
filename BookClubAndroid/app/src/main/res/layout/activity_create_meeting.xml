@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context=".CreateMeeting">
 
     <RelativeLayout
@@ -84,7 +85,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/meetingDateHint"
-            android:inputType="date"
+            android:inputType="text"
             android:layout_marginStart="110dp"
             android:layout_below="@id/locationEditText"
             android:layout_marginTop="25dp" />
@@ -96,7 +97,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/meetingTimeHint"
-            android:inputType="time"
+            android:inputType="text"
             android:layout_marginStart="110dp"
             android:layout_below="@id/dateEditText"
             android:layout_marginTop="25dp" />
@@ -108,7 +109,7 @@
             android:layout_marginEnd="50dp"
             android:ems="10"
             android:hint="@string/meetingTimeHint"
-            android:inputType="time"
+            android:inputType="text"
             android:layout_marginStart="110dp"
             android:layout_below="@id/startTimeEditText"
             android:layout_marginTop="25dp" />
@@ -120,6 +121,8 @@
             android:text="@string/setLocationBtn"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/endTimeEditText"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="50dp" />
 
         <Button
@@ -129,6 +132,8 @@
             android:text="@string/chooseBookText"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/getLocationBtn"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="20dp" />
 
         <Button
@@ -138,6 +143,8 @@
             android:text="@string/createMeetingBtn"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/addBook"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="100dp" />
     </RelativeLayout>
 </ScrollView>

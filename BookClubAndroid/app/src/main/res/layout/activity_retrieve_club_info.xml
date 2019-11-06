@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     tools:context=".RetrieveClubInfo">
 
     <ListView
@@ -20,8 +21,10 @@
         android:clickable="true"
         app:srcCompat="@android:drawable/ic_input_add"
         android:focusable="true"
+        android:tint="@color/colorAccent"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:layout_alignEnd="@id/bookClubListView"
         android:layout_marginEnd="10dp"/>
 

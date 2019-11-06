@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     tools:context=".BookSearch">
 
     <TextView
@@ -28,6 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:text="@string/search" />
 
     <CheckBox
@@ -35,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:buttonTint="@color/colorPrimary"
         android:text="@string/author" />
 
     <CheckBox
@@ -42,5 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:buttonTint="@color/colorPrimary"
         android:text="@string/title" />
 </LinearLayout>

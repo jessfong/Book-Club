@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     tools:context=".UserProfile">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,6 +24,8 @@
             android:layout_height="wrap_content"
             android:text="@string/createBookClubUploadImageBtn"
             android:layout_below="@id/userProfilePic"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:layout_centerHorizontal="true"/>
 
         <EditText
@@ -44,6 +47,8 @@
             android:text="@string/saveUserProfile"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:layout_marginBottom="50dp"/>
 
         <TextView

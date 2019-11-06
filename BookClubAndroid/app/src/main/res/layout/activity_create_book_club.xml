@@ -1,55 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     tools:context=".CreateBookClub">
-
-    <ImageView
-        android:id="@+id/createBookClubUploadedImageView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="145dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginBottom="300dp"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/createBookClubNameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/createBookClubNameHint"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/createBookClubBtn"
-        android:layout_marginBottom="50dp"
-        android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/createBookClubTextView"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:text="@string/createBookClubInstructionsTextView"
+            android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/createBookClubUploadImageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/createBookClubUploadImageBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="450dp"/>
+        <ImageView
+            android:id="@+id/createBookClubUploadedImageView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@id/createBookClubTextView"/>
 
-    <Button
-        android:id="@+id/createBookClubBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/createBookClubBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"/>
+        <Button
+            android:id="@+id/createBookClubUploadImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/createBookClubUploadImageBtn"
+            android:layout_below="@id/createBookClubUploadedImageView"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
+            android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:id="@+id/createBookClubTextView"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:text="@string/createBookClubInstructionsTextView"
-        android:textSize="18sp" />
+        <EditText
+            android:id="@+id/createBookClubNameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/createBookClubNameHint"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:layout_below="@id/createBookClubUploadImageBtn"
+            android:inputType="textPersonName" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/createBookClubBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/createBookClubBtn"
+            android:layout_below="@id/createBookClubNameEditText"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+</ScrollView>

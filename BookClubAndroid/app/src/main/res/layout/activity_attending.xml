@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context=".AttendingActivity">
 
     <TextView
@@ -39,6 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/meetingDate"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:text="Delete Meeting"
         android:textSize="20sp" />
 

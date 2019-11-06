@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
     tools:context=".BookClubDetails">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,6 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:text="@string/addMembersBtn" />
 
             <Button
@@ -52,6 +55,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:text="@string/createMeetingBtn" />
 
             <Button
@@ -59,6 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:text="@string/deleteClubBtn" />
 
             <Button
@@ -66,6 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:text="@string/viewMeetingsBtn" />
 
         </LinearLayout>
