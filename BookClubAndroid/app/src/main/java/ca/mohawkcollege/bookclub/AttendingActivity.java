@@ -1,12 +1,6 @@
 package ca.mohawkcollege.bookclub;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -86,7 +80,6 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
-
         DatabaseReference members = FirebaseDatabase.getInstance().getReference("BookClubs");
         Query query = members.orderByChild("recordId").equalTo(meeting.bookClubId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -104,8 +97,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
         TextView owner = findViewById(R.id.meetingTextView);
@@ -161,8 +153,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                        }
+                        public void onCancelled(@NonNull DatabaseError databaseError) {}
                     });
                 }
 
@@ -174,8 +165,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
              * @param databaseError - error that prevented retrieval of data
              */
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 

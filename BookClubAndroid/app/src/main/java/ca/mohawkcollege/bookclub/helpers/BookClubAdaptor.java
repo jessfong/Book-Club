@@ -2,7 +2,6 @@ package ca.mohawkcollege.bookclub.helpers;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mohawkcollege.bookclub.R;
-import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.User;
 
@@ -53,8 +51,10 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
      */
     @Override
     public void add(BookClub bookClub) {
-        super.add(bookClub);
-        bookClubs.add(bookClub);
+        if (!bookClubs.contains(bookClub)) {
+            super.add(bookClub);
+            bookClubs.add(bookClub);
+        }
     }
 
     /**

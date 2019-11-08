@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import ca.mohawkcollege.bookclub.R;
-import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
 public class MemberAdapter extends ArrayAdapter<User> {

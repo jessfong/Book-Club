@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import ca.mohawkcollege.bookclub.helpers.OnUploadImage;
 import ca.mohawkcollege.bookclub.objects.BookClub;
+import ca.mohawkcollege.bookclub.objects.Member;
 
 public class CreateBookClub extends AppCompatActivity {
 
@@ -43,6 +44,7 @@ public class CreateBookClub extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 71;
     private Context context;
     private Uri imageFile;
+    private FirebaseUser user;
 
     /**
      * Gathers data for new book club and writes it to BookClubs table in firebase
@@ -57,7 +59,7 @@ public class CreateBookClub extends AppCompatActivity {
         context = this;
 
         // Set instance of database and user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference("BookClubs");
 
         firebaseStorage = FirebaseStorage.getInstance();
@@ -183,7 +185,7 @@ public class CreateBookClub extends AppCompatActivity {
     }
 
     // Add new book club to database
-    public void writeNewClub(final String user, final String bookClubName) {
+    private void writeNewClub(final String userId, final String bookClubName) {
         uploadImage(new OnUploadImage() {
             /**
              * Writes book club data to database once image uri is retrieved
@@ -194,8 +196,13 @@ public class CreateBookClub extends AppCompatActivity {
                 String key = mDatabase.push().getKey();
 
                 if (key != null) {
-                    BookClub bookClub = new BookClub(user, bookClubName, result.toString(), key);
+                    BookClub bookClub = new BookClub(userId, bookClubName, result.toString(), key);
                     mDatabase.child(key).setValue(bookClub);
+
+                    DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
+                    Member member = new Member(user.getUid(), key, user.getPhoneNumber());
+                    String memberKey = members.push().getKey();
+                    members.child(memberKey).setValue(member);
                 } else {
                     Toast.makeText(getApplicationContext(), "Book club name cannot be empty.", Toast.LENGTH_SHORT).show();
                 }
