@@ -80,7 +80,9 @@ exports.meetingsListener = functions.database
     var tokens = [];
     for (var userResultIndex = 0; userResultIndex < userResults.length; userResultIndex++) {
       var userResult = userResults[userResultIndex].val();
-      tokens.push(userResult.token);
+      if (bookClubSnapshot.clubOwner !== userResult.userId) {
+        tokens.push(userResult.token);
+      }
     }
 
     // Notification details.

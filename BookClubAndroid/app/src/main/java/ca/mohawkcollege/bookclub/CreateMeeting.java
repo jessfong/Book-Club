@@ -248,31 +248,4 @@ public class CreateMeeting extends AppCompatActivity {
             }
         }
     }
-
-    // Finds each member in the club and adds them to a list
-    public void getListOfAttendees(final String clubId, final onComplete onComplete) {
-        final StringBuilder listOfMembers = new StringBuilder();
-
-        DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
-        Query query = members.orderByChild("bookClubId").equalTo(clubId);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Member member = child.getValue(Member.class);
-
-                    if (member.bookClubId.equals(clubId)) {
-                        listOfMembers.append(member.userId);
-                    }
-                }
-
-                onComplete.onComplete(listOfMembers);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
 }
