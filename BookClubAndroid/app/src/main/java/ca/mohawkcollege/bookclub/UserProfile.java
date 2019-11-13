@@ -39,6 +39,10 @@ import java.util.UUID;
 import ca.mohawkcollege.bookclub.helpers.OnUploadImage;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * User profile activity
+ * Allow user to upload a user profile name and picture
+ */
 public class UserProfile extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
@@ -48,6 +52,10 @@ public class UserProfile extends AppCompatActivity {
     private DatabaseReference users;
     private User userData;
 
+    /**
+     * Overrides method to create user profile layout
+     * @param savedInstanceState - saved data from last login
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +69,7 @@ public class UserProfile extends AppCompatActivity {
         final EditText displayName = findViewById(R.id.userProfileName);
         final ImageView imageView = findViewById(R.id.userProfilePic);
 
+        // Get saved user profile data from user database table
         users = FirebaseDatabase.getInstance().getReference("Users");
         Query query = users.orderByChild("userId").equalTo(user.getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -91,6 +100,7 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
+        // Starts chooseImage method when upload image button is clicked
         Button imageButton = findViewById(R.id.userProfilePicUploadImageBtn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +109,7 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
+        // Saves image and user name when user clicks save button
         Button saveChanges = findViewById(R.id.saveUserProfile);
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +127,11 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -127,6 +143,9 @@ public class UserProfile extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Starts activity when user wants to choose a profile picture
+     */
     public void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -135,11 +154,10 @@ public class UserProfile extends AppCompatActivity {
     }
 
     /**
-     * Display gallery image in createBookClub view
-     *
-     * @param requestCode - code determining where the request came from
-     * @param resultCode  - code determining what the result was
-     * @param data        - data returned from the activity
+     * Override method for onActivityResult
+     * @param requestCode - request code of activity
+     * @param resultCode - result code of activity
+     * @param data - data from activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,6 +186,10 @@ public class UserProfile extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uploads the chosen image to firebase storage
+     * @param onUploadImage - onUploadImage object
+     */
     private void uploadImage(final OnUploadImage onUploadImage) {
         StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
         ref.putFile(imageFile)

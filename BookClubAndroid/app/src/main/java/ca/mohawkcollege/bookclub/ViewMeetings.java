@@ -22,17 +22,23 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.mohawkcollege.bookclub.helpers.MeetingAdaptor;
-import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * View meetings activity
+ */
 public class ViewMeetings extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private BookClub bookClub;
     private String ownerName;
 
+    /**
+     * Overrides method to create view meeting layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,7 @@ public class ViewMeetings extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         bookClub = (BookClub) bundle.getSerializable("recordId");
 
+        // Get list of book club members attending the meeting
         DatabaseReference members = FirebaseDatabase.getInstance().getReference("Users");
         Query query = members.orderByChild("userId").equalTo(bookClub.clubOwner);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,15 +101,12 @@ public class ViewMeetings extends AppCompatActivity {
                 listView.setAdapter(meetingAdaptor);
             }
 
-            /**
-             * Called when there was an error retrieving the Meetings table from firebase
-             * @param databaseError - error that prevented retrieval of data
-             */
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
+        // When a meeting is selected from list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -121,6 +125,11 @@ public class ViewMeetings extends AppCompatActivity {
         });
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

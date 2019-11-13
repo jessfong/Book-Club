@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,14 +18,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.mohawkcollege.bookclub.helpers.MeetingAdaptor;
 import ca.mohawkcollege.bookclub.objects.Attending;
-import ca.mohawkcollege.bookclub.objects.AttendingView;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Past meetings activity
+ */
 public class PastMeetingsActivity extends AppCompatActivity {
 
     private User user;
 
+    /**
+     * Overrides method to create past meetings layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,7 @@ public class PastMeetingsActivity extends AppCompatActivity {
         final ListView listView = findViewById(R.id.pastMeetingsList);
         final MeetingAdaptor meetingAdaptor = new MeetingAdaptor(this, R.layout.book_meeting_info);
 
+        // Get list of past meetings that the current user has accepted
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference attending = firebaseDatabase.getReference("Attending");
         Query query = attending.orderByChild("attendingUserId").equalTo(user.userId);
@@ -89,6 +95,11 @@ public class PastMeetingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

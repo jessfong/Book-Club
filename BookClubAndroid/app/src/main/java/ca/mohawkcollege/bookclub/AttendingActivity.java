@@ -37,11 +37,18 @@ import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Attending activity
+ */
 public class AttendingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private Meeting meeting;
     private BookClub bookClub;
 
+    /**
+     * Overrides method to create attending layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +61,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         Bundle bundle = getIntent().getExtras();
         meeting = (Meeting) bundle.getSerializable("meeting");
 
+        // Deletes meeting from firebase when the delete meeting button is clicked
         final Button deleteMeeting = findViewById(R.id.deleteMeeting);
         deleteMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +90,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        // Gets list of book club members
         DatabaseReference members = FirebaseDatabase.getInstance().getReference("BookClubs");
         Query query = members.orderByChild("recordId").equalTo(meeting.bookClubId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -111,6 +120,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         TextView date = findViewById(R.id.meetingDate);
         date.setText(String.format("%s @ %s - %s", meeting.date, meeting.startTime, meeting.endTime));
 
+        // Display map of meeting location
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -123,6 +133,7 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         final ListView listView = findViewById(R.id.attendingListView);
         final AttendingAdapter attendingAdaptor = new AttendingAdapter(this, R.layout.book_attending_info);
 
+        // Gets list of attendees
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -162,15 +173,15 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
                 listView.setAdapter(attendingAdaptor);
             }
 
-            /**
-             * Called when there was an error retrieving the Meetings table from firebase
-             * @param databaseError - error that prevented retrieval of data
-             */
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 
+    /**
+     * Displays location of the meeting on a google map
+     * @param googleMap - map of meeting location
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (meeting != null) {
@@ -181,6 +192,11 @@ public class AttendingActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

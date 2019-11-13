@@ -36,6 +36,9 @@ import ca.mohawkcollege.bookclub.helpers.OnUploadImage;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Member;
 
+/**
+ * Create book club activity
+ */
 public class CreateBookClub extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
@@ -47,9 +50,8 @@ public class CreateBookClub extends AppCompatActivity {
     private FirebaseUser user;
 
     /**
-     * Gathers data for new book club and writes it to BookClubs table in firebase
-     *
-     * @param savedInstanceState - saved data from last login
+     * Overrides method to create create book club layout
+     * @param savedInstanceState - bundle data from last activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,8 @@ public class CreateBookClub extends AppCompatActivity {
             }
         });
 
+        // Redirect to create book club view when create book club button is clicked
         if (user != null) {
-            // When create book club button is clicked
             Button button = findViewById(R.id.createBookClubBtn);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,6 +104,11 @@ public class CreateBookClub extends AppCompatActivity {
         }
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -113,7 +120,9 @@ public class CreateBookClub extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Allow user to choose book club image from gallery
+    /**
+     * Allow user to choose book club image from gallery
+     */
     public void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -122,11 +131,10 @@ public class CreateBookClub extends AppCompatActivity {
     }
 
     /**
-     * Display gallery image in createBookClub view
-     *
+     * Override method for onActivityResult to display gallery image in createBookClub view
      * @param requestCode - code determining where the request came from
      * @param resultCode  - code determining what the result was
-     * @param data        - data returned from the activity
+     * @param data - data returned from the activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -146,7 +154,10 @@ public class CreateBookClub extends AppCompatActivity {
         }
     }
 
-    // Writing chosen image uri to firebase BookClubs table
+    /**
+     * Write chosen image uri to firebase BookClubs table
+     * @param onUploadImage - onUploaded object
+     */
     private void uploadImage(final OnUploadImage onUploadImage) {
         StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
         ref.putFile(imageFile)
@@ -184,13 +195,13 @@ public class CreateBookClub extends AppCompatActivity {
                 });
     }
 
-    // Add new book club to database
+    /**
+     * Create new book club
+     * @param userId - owner of book club
+     * @param bookClubName - name of book club
+     */
     private void writeNewClub(final String userId, final String bookClubName) {
         uploadImage(new OnUploadImage() {
-            /**
-             * Writes book club data to database once image uri is retrieved
-             * @param result - result of uploaded record
-             */
             @Override
             public void onComplete(Uri result) {
                 String key = mDatabase.push().getKey();

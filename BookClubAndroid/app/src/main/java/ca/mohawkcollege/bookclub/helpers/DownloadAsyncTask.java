@@ -15,14 +15,26 @@ import java.nio.charset.StandardCharsets;
 
 import ca.mohawkcollege.bookclub.objects.bookobjects.Book;
 
+/**
+ * Download async task
+ */
 public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
 
     private OnDownloadAsyncTask onDownloadAsyncTask;
 
+    /**
+     * Constructor to set downloading task to this task
+     * @param onDownloadAsyncTask - task to download
+     */
     public DownloadAsyncTask(OnDownloadAsyncTask onDownloadAsyncTask) {
         this.onDownloadAsyncTask = onDownloadAsyncTask;
     }
 
+    /**
+     * Create a new http connection to download the task in the background
+     * @param params - parameters for the url connection
+     * @return results of the task after it is finished downloading
+     */
     @Override
     protected String doInBackground(String... params) {
         StringBuilder results = new StringBuilder();
@@ -49,6 +61,10 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
         return results.toString();
     }
 
+    /**
+     * Gets result of the task after it has finished
+     * @param result - result of the download task
+     */
     protected void onPostExecute(String result) {
         Gson gson = new Gson();
         Book book = gson.fromJson(result, Book.class);
@@ -56,6 +72,9 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
         onDownloadAsyncTask.onComplete(book);
     }
 
+    /**
+     * Interface for the task being downloaded
+     */
     public interface OnDownloadAsyncTask {
         void onComplete(Book book);
     }

@@ -14,14 +14,22 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Book search activity
+ */
 public class BookSearch extends AppCompatActivity {
 
+    /**
+     * Overrides method to create book search layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Looks for all books with given search requirements
         Button searchButton = findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +66,11 @@ public class BookSearch extends AppCompatActivity {
         });
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -69,6 +82,12 @@ public class BookSearch extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Override method for onActivityResult
+     * @param requestCode - request code of activity
+     * @param resultCode - result code of activity
+     * @param data - data from activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

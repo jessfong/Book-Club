@@ -21,16 +21,18 @@ import java.util.List;
 import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.Meeting;
 
-
+/**
+ * Meeting adaptor
+ */
 public class MeetingAdaptor extends ArrayAdapter<Meeting> {
 
     private final Context context;
     private List<Meeting> meetings;
 
     /**
-     * * Constructor to set context and arrayList variables for later use
-     * * @param context - context
-     * * @param bookClubInfoResourceId - book_club_info layout resource id
+     * Constructor to set context and arrayList variables for later use
+     * @param context - context
+     * @param bookClubInfoResourceId - book_club_info layout resource id
      */
     public MeetingAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
         super(context, bookClubInfoResourceId);
@@ -39,9 +41,8 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
     }
 
     /**
-     * Adds current book club info to bookClubs arrayList
-     *
-     * @param meeting - record to add to arrayList
+     * Adds current meeting to meetings arrayList
+     * @param meeting - meeting to add
      */
     @Override
     public void add(Meeting meeting) {
@@ -49,12 +50,15 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
         meetings.add(meeting);
     }
 
+    /**
+     * Reverse the order of meetings in the list
+     */
     public void reverse() {
         Collections.reverse(meetings);
     }
 
     /**
-     * Clears adapter of all book club objects
+     * Clears adapter of all meeting objects
      */
     @Override
     public void clear() {
@@ -62,13 +66,17 @@ public class MeetingAdaptor extends ArrayAdapter<Meeting> {
         meetings.clear();
     }
 
+    /**
+     * Gets selected meeting
+     * @param index - index of selected meeting
+     * @return view of selected meeting
+     */
     public Meeting getItem(int index) {
         return this.meetings.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     *
      * @param position    - record number in the database
      * @param convertView - view of the listItem
      * @param parent      - parent view of the listItem

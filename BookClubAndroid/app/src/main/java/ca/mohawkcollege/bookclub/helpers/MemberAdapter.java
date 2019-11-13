@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Member adaptor
+ */
 public class MemberAdapter extends ArrayAdapter<User> {
 
     private final ArrayList<User> members;
@@ -26,8 +29,7 @@ public class MemberAdapter extends ArrayAdapter<User> {
 
     /**
      * Constructor to set context and arrayList variables for later use
-     *
-     * @param context              - context
+     * @param context - context
      * @param memberInfoResourceId - member_info layout resource id
      */
     public MemberAdapter(Context context, int memberInfoResourceId) {
@@ -38,8 +40,7 @@ public class MemberAdapter extends ArrayAdapter<User> {
 
     /**
      * Adds current member info to members arrayList
-     *
-     * @param member - record to add to arrayList
+     * @param member - member to add
      */
     @Override
     public void add(User member) {
@@ -47,13 +48,17 @@ public class MemberAdapter extends ArrayAdapter<User> {
         members.add(member);
     }
 
+    /**
+     * Gets selected member from list
+     * @param index - index of selected member
+     * @return view of selected member
+     */
     public User getItem(int index) {
         return this.members.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     *
      * @param position    - record number in the database
      * @param convertView - view of the listItem
      * @param parent      - parent view of the listItem

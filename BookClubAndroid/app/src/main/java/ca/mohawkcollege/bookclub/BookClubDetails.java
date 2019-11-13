@@ -37,12 +37,19 @@ import ca.mohawkcollege.bookclub.objects.Invite;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Book club details
+ */
 public class BookClubDetails extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private DatabaseReference databaseReference;
     private BookClub bookClub;
     private MemberAdapter memberAdapter;
 
+    /**
+     * Overrides method to create book club details layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
         TextView clubNameTextView = findViewById(R.id.clubNameTextView);
         clubNameTextView.setText(bookClub.name);
 
+        // Getting book club owner name or phone number to display
         final TextView adminNameTextView = findViewById(R.id.clubAdminTextView);
         DatabaseReference users = FirebaseDatabase.getInstance().getReference("Users");
         Query query = users.orderByChild("userId").equalTo(bookClub.clubOwner);
@@ -82,11 +90,13 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
             }
         });
 
+        // Setting book club image
         ImageView infoBookClubImageView = findViewById(R.id.clubImageView);
         Glide.with(this)
                 .load(Uri.parse(bookClub.imageUrl))
                 .into(infoBookClubImageView);
 
+        // Getting members list
         ListView listView = findViewById(R.id.membersListView);
         listView.setOnItemClickListener(this);
         memberAdapter = new MemberAdapter(this, R.layout.member_info);
@@ -132,7 +142,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
 
         listView.setAdapter(memberAdapter);
 
-        // If user wants to delete a book club
+        // When user clicks the delete book club button
         Button deleteClubBtn = findViewById(R.id.deleteClubBtn);
         deleteClubBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +173,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
             }
         });
 
-        // If user wants to create a book club meeting, check if user is owner
+        // Set visibility of buttons depending on user role
         final Button createMeetingBtn = findViewById(R.id.createMeetingBtn);
         if (bookClub.clubOwner.equals(firebaseUser.getUid())) {
             createMeetingBtn.setVisibility(Button.VISIBLE);
@@ -173,6 +183,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
             deleteClubBtn.setVisibility(Button.GONE);
         }
 
+        // When create meeting button is clicked
         createMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,7 +204,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
             }
         });
 
-        // If user wants to view meetings
+        // When view meetings button is clicked
         Button viewMeetingsBtn = findViewById(R.id.viewMeetingsBtn);
         viewMeetingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +216,12 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
         });
     }
 
+    /**
+     * Override method for onActivityResult
+     * @param requestCode - request code of activity
+     * @param resultCode - result code of activity
+     * @param data - data from activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -237,6 +254,7 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
                                     return;
                                 }
 
+                                // Add user to members list if they aren't already a member
                                 DatabaseReference members = FirebaseDatabase.getInstance().getReference("Members");
                                 Query query = members.orderByChild("userId").equalTo(user.userId);
                                 query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -285,6 +303,13 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    /**
+     * Redirects to a view of member's previous meetings
+     * @param adapterView - member adaptor
+     * @param view - current view
+     * @param i - index of current member
+     * @param l - default parameter
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         User user = memberAdapter.getItem(i);
@@ -296,6 +321,11 @@ public class BookClubDetails extends AppCompatActivity implements AdapterView.On
         startActivity(intent);
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

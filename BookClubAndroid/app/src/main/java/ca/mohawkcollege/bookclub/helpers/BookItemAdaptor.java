@@ -22,16 +22,18 @@ import java.util.List;
 import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.bookobjects.Items;
 
-
+/**
+ * Book item adaptor
+ */
 public class BookItemAdaptor extends ArrayAdapter<Items> {
 
     private final Context context;
     private List<Items> itemsList;
 
     /**
-     * * Constructor to set context and arrayList variables for later use
-     * * @param context - context
-     * * @param bookClubInfoResourceId - book_club_info layout resource id
+     * Constructor to set context and arrayList variables for later use
+     * @param context - context
+     * @param bookClubInfoResourceId - book_club_info layout resource id
      */
     public BookItemAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
         super(context, bookClubInfoResourceId);
@@ -40,9 +42,8 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
     }
 
     /**
-     * Adds current book club info to bookClubs arrayList
-     *
-     * @param items - record to add to arrayList
+     * Adds book to arrayList of found books
+     * @param items - book to add
      */
     @Override
     public void add(Items items) {
@@ -50,6 +51,10 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
         itemsList.add(items);
     }
 
+    /**
+     * Adds all found books to arrayList
+     * @param items - list of books
+     */
     @Override
     public void addAll(Items... items) {
         super.addAll(items);
@@ -58,11 +63,19 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
         }
     }
 
+    /**
+     * Gets number of books in the list of found books
+     * @return number of books
+     */
     @Override
     public int getCount() {
         return itemsList.size();
     }
 
+    /**
+     * Adds all book items to arrayList
+     * @param collection - collection of book items
+     */
     @Override
     public void addAll(Collection<? extends Items> collection) {
         if (collection != null) {
@@ -73,12 +86,8 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
         }
     }
 
-    public void reverse() {
-        Collections.reverse(itemsList);
-    }
-
     /**
-     * Clears adapter of all book club objects
+     * Clears adapter of all book objects
      */
     @Override
     public void clear() {
@@ -86,16 +95,20 @@ public class BookItemAdaptor extends ArrayAdapter<Items> {
         itemsList.clear();
     }
 
+    /**
+     * Gets book item from arrayList
+     * @param index - index of book from arrayList
+     * @return selected book
+     */
     public Items getItem(int index) {
         return this.itemsList.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     *
-     * @param position    - record number in the database
+     * @param position - record number in the database
      * @param convertView - view of the listItem
-     * @param parent      - parent view of the listItem
+     * @param parent - parent view of the listItem
      * @return custom view of listItem
      */
     @NonNull

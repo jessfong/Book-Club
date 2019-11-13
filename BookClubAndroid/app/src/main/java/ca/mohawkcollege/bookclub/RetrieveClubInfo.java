@@ -23,20 +23,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
-
 import ca.mohawkcollege.bookclub.helpers.BookClubAdaptor;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.Member;
 
+/**
+ * Retrieve club info activity
+ * Generates list of current user's book clubs
+ */
 public class RetrieveClubInfo extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
-    String recordId = "";
 
     /**
-     * Generates list of current user's book clubs
-     *
+     * Overrides method to create retrieve club info layout
      * @param savedInstanceState - saved data from last login
      */
     @Override
@@ -105,17 +105,13 @@ public class RetrieveClubInfo extends AppCompatActivity {
                 listView.setAdapter(bookClubAdaptor);
             }
 
-            /**
-             * Called when there was an error retrieving the BookClubs table from firebase
-             * @param databaseError - error that prevented retrieval of data
-             */
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
 
-        // If create new book club is clicked
+        // Start activity when create book club button is clicked
         FloatingActionButton createButton = findViewById(R.id.createBookClubBtn);
         createButton.setOnClickListener(new View.OnClickListener() {
             /**
@@ -130,7 +126,7 @@ public class RetrieveClubInfo extends AppCompatActivity {
         });
 
 
-        // If list view item is clicked
+        // Start activity when list book club in list is clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -143,6 +139,11 @@ public class RetrieveClubInfo extends AppCompatActivity {
         });
     }
 
+    /**
+     * Generate list items in view
+     * @param menu - list item
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -150,6 +151,11 @@ public class RetrieveClubInfo extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Start activity when wrench is clicked
+     * @param item - wrench icon
+     * @return user profile activity
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_user_profile) {

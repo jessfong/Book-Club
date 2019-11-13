@@ -25,9 +25,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Messaging service activity
+ */
 public class MessagingService extends FirebaseMessagingService {
     private final static AtomicInteger atomicInteger = new AtomicInteger(0);
 
+    /**
+     * Creates a notification when a new invite is recieved
+     * @param remoteMessage - message
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -50,6 +57,12 @@ public class MessagingService extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * Create a book club notification
+     * @param title - title of notification
+     * @param message - message of notification
+     * @param bookClubId - id of book club in the invite
+     */
     public void showBookClubInvite(String title, String message, String bookClubId) {
         int id = atomicInteger.incrementAndGet();
 
@@ -89,6 +102,18 @@ public class MessagingService extends FirebaseMessagingService {
         manager.notify(id, builder.build());
     }
 
+    /**
+     * Create a meeting notification
+     * @param title - title of meeting notification
+     * @param message - message of meeting notification
+     * @param meetingUID - id of meeting
+     * @param date - meeting date
+     * @param startTime - meeting start time
+     * @param endTime - meeting end time
+     * @param location - meeting location
+     * @param bookTitle - title of book being reviewed in meeting
+     * @param bookAuthor - author of book being reviewed in meeting
+     */
     public void showMeetingInvite(String title, String message, String meetingUID, String date, String startTime, String endTime, String location, String bookTitle, String bookAuthor) {
         int id = atomicInteger.incrementAndGet();
 
@@ -139,6 +164,10 @@ public class MessagingService extends FirebaseMessagingService {
         manager.notify(id, builder.build());
     }
 
+    /**
+     * Set new user's data to previous user's data before their token was changed
+     * @param s - new user token
+     */
     @Override
     public void onNewToken(@NonNull final String s) {
         super.onNewToken(s);
@@ -166,7 +195,6 @@ public class MessagingService extends FirebaseMessagingService {
                 }
             });
         } catch (NullPointerException e) {
-
         }
     }
 }

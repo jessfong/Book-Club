@@ -39,6 +39,9 @@ import ca.mohawkcollege.bookclub.objects.Attending;
 import ca.mohawkcollege.bookclub.objects.Member;
 import ca.mohawkcollege.bookclub.objects.User;
 
+/**
+ * Main activity
+ */
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -46,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private static int RC_SIGN_IN = 1;
 
     /**
-     * Signs in user, retrieves list of user's book clubs, and allows users to create a new book club
-     *
+     * Overrides method to create main layout
      * @param savedInstanceState - saved data from last login
      */
     @Override
@@ -86,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = new ArrayList<>();
         providers.add(new AuthUI.IdpConfig.PhoneBuilder().build());
-        //providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
      * Gets called whenever an activity returns a result.
      * When the requestCode is RC_SIGN_IN we are checking if the user is signed in.
      * If the resultCode is RESULT_OK user sign in was successful.
-     *
      * @param requestCode - code determining where the request came from
      * @param resultCode  - code determining what the result was
      * @param data        - data returned from the activity
@@ -154,9 +154,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
+                // Check if there was a notification and what type it is
                 if (MainActivity.this.getIntent().hasExtra("type")) {
                     String notificationType = MainActivity.this.getIntent().getStringExtra("type");
 
+                    // Add user to book club's members list if type is book club and notification is accepted
                     if (notificationType.equals("bookclub")) {
                         boolean accept = MainActivity.this.getIntent().getBooleanExtra("accept", false);
                         String recordId = MainActivity.this.getIntent().getStringExtra("recordId");
@@ -197,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                             int endHour = Integer.parseInt(endTimeSplit[0]);
                             int endMinute = Integer.parseInt(endTimeSplit[1]);
 
+                            // Add event to calendar
                             Calendar beginTime = Calendar.getInstance();
                             beginTime.set(year, month, day, startHour, startMinute);
                             Calendar endTimeCalendar = Calendar.getInstance();
@@ -222,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Uri event = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
+                            // Set calendar reminder
                             ContentValues reminderValues = new ContentValues();
                             reminderValues.put("event_id", Long.parseLong(event.getLastPathSegment()));
                             reminderValues.put("method", 1);

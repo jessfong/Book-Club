@@ -20,6 +20,9 @@ import ca.mohawkcollege.bookclub.objects.bookobjects.Items;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
+/**
+ * Book club list
+ */
 public class BookList extends AppCompatActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
     private String url;
@@ -27,18 +30,24 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
     private BookItemAdaptor bookItemAdaptor;
     public int totalBooks;
 
+    /**
+     * Overrides method to create book list layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set the list of found books
         bookItemAdaptor = new BookItemAdaptor(this, R.layout.book_item_info);
         url = getIntent().getStringExtra("search");
         bookList = findViewById(R.id.booksList);
         bookList.setOnScrollListener(this);
         bookList.setOnItemClickListener(this);
 
+        // Download book items for the given search parameters
         DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(new DownloadAsyncTask.OnDownloadAsyncTask() {
             @Override
             public void onComplete(Book book) {
@@ -58,6 +67,11 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
         downloadAsyncTask.execute(url);
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -69,11 +83,21 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Overrides method to display list of book items on scroll
+     * @param absListView - book items list view
+     * @param firstIndex - index of first item in the list
+     * @param visibleCount - visible count of items in the list
+     * @param totalCount - total number of items in the list
+     */
     @Override
-    public void onScroll(AbsListView absListView, int firstIndex, int visibleCount, int totalCount) {
+    public void onScroll(AbsListView absListView, int firstIndex, int visibleCount, int totalCount) {}
 
-    }
-
+    /**
+     * Updates the view when the list is scrolled
+     * @param absListView - book items list view
+     * @param scrollState - state of view
+     */
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && (bookList.getLastVisiblePosition() - bookList.getHeaderViewsCount() - bookList.getFooterViewsCount()) >= (bookItemAdaptor.getCount() - 1)) {
@@ -100,6 +124,13 @@ public class BookList extends AppCompatActivity implements AbsListView.OnScrollL
         }
     }
 
+    /**
+     * Overrides method to display selected item from list
+     * @param adapterView - book item adaptor view
+     * @param view - current activity's view
+     * @param i - index of item from list
+     * @param l - default parameter
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Items items = bookItemAdaptor.getItem(i);

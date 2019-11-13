@@ -12,18 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.schibstedspain.leku.LocationPickerActivity;
 
 import java.text.DateFormat;
@@ -32,12 +27,14 @@ import java.text.SimpleDateFormat;
 
 import ca.mohawkcollege.bookclub.objects.Attending;
 import ca.mohawkcollege.bookclub.objects.Meeting;
-import ca.mohawkcollege.bookclub.objects.Member;
 
 import static com.schibstedspain.leku.LocationPickerActivityKt.LATITUDE;
 import static com.schibstedspain.leku.LocationPickerActivityKt.LOCATION_ADDRESS;
 import static com.schibstedspain.leku.LocationPickerActivityKt.LONGITUDE;
 
+/**
+ * Create meeting activity
+ */
 public class CreateMeeting extends AppCompatActivity {
 
     private String dateText;
@@ -49,6 +46,10 @@ public class CreateMeeting extends AppCompatActivity {
     public double latitude;
     public double longitude;
 
+    /**
+     * Overrides method to create meeting layout
+     * @param savedInstanceState - bundle data from last activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +58,11 @@ public class CreateMeeting extends AppCompatActivity {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Get book club record id form last activity
+        // Get book club id form last activity
         Intent intent = getIntent();
         final String bookClubId = intent.getStringExtra("recordId");
 
+        // Start location picker activity when user clicks set location button
         Button locationBtn = findViewById(R.id.getLocationBtn);
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,17 +78,14 @@ public class CreateMeeting extends AppCompatActivity {
             }
         });
 
+        // Set meeting date and valid that date is a valid date
         final EditText dateEditText = findViewById(R.id.dateEditText);
         dateEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -102,17 +101,14 @@ public class CreateMeeting extends AppCompatActivity {
             }
         });
 
+        // Set start time and valid that input is a valid time
         final EditText startTimeEditText = findViewById(R.id.startTimeEditText);
         startTimeEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -128,17 +124,14 @@ public class CreateMeeting extends AppCompatActivity {
             }
         });
 
+        // Set end time and valid that input is a valid time
         final EditText endTimeEditText = findViewById(R.id.endTimeEditText);
         endTimeEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -154,7 +147,7 @@ public class CreateMeeting extends AppCompatActivity {
             }
         });
 
-        // When choose book button is clicked
+        // Start book search activity when search button is clicked
         Button addBookBtn = findViewById(R.id.addBook);
         addBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +195,7 @@ public class CreateMeeting extends AppCompatActivity {
                 Meeting meeting = new Meeting(key, bookClubId, locationText, dateText, startTimeText, endTimeText, bookTitle, authors, thumb, latitude, longitude);
                 meetings.child(key).setValue(meeting);
 
+                // Get list of attending members
                 DatabaseReference attending = FirebaseDatabase.getInstance().getReference("Attending");
                 String attendingKey = attending.push().getKey();
                 Attending attendingUser = new Attending(key, user.getUid());
@@ -212,6 +206,11 @@ public class CreateMeeting extends AppCompatActivity {
         });
     }
 
+    /**
+     * Brings user to previous activity when back button is clicked
+     * @param item - back button
+     * @return view of previous activity
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -223,10 +222,19 @@ public class CreateMeeting extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Interface for when list of members is finished building
+     */
     public interface onComplete {
         void onComplete(StringBuilder listOfMembers);   //Callback method notifies when done
     }
 
+    /**
+     * Override method for onActivityResult
+     * @param requestCode - request code of activity
+     * @param resultCode - result code of activity
+     * @param data - data from activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

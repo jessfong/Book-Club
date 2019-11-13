@@ -27,16 +27,18 @@ import ca.mohawkcollege.bookclub.R;
 import ca.mohawkcollege.bookclub.objects.BookClub;
 import ca.mohawkcollege.bookclub.objects.User;
 
-
+/**
+ * Book club adaptor
+ */
 public class BookClubAdaptor extends ArrayAdapter<BookClub> {
 
     private final Context context;
     private List<BookClub> bookClubs;
 
     /**
-     * * Constructor to set context and arrayList variables for later use
-     * * @param context - context
-     * * @param bookClubInfoResourceId - book_club_info layout resource id
+     * Constructor to set context and arrayList variables for later use
+     * @param context - context
+     * @param bookClubInfoResourceId - book_club_info layout resource id
      */
     public BookClubAdaptor(@NonNull Context context, int bookClubInfoResourceId) {
         super(context, bookClubInfoResourceId);
@@ -46,7 +48,6 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
 
     /**
      * Adds current book club info to bookClubs arrayList
-     *
      * @param bookClub - record to add to arrayList
      */
     @Override
@@ -66,16 +67,20 @@ public class BookClubAdaptor extends ArrayAdapter<BookClub> {
         bookClubs.clear();
     }
 
+    /**
+     * Gets selected book club
+     * @param index - index of selected book club
+     * @return view for selected book club
+     */
     public BookClub getItem(int index) {
         return this.bookClubs.get(index);
     }
 
     /**
      * Overriding get view method to create a view for each item in the arrayList
-     *
-     * @param position    - record number in the database
+     * @param position - record number in the database
      * @param convertView - view of the listItem
-     * @param parent      - parent view of the listItem
+     * @param parent - parent view of the listItem
      * @return custom view of listItem
      */
     @NonNull
